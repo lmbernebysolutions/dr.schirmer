@@ -121,15 +121,6 @@ const PasswordProtection: React.FC<PasswordProtectionProps> = ({ children }) => 
 
   return (
     <div className="relative">
-      {/* Logout Button - nur für Entwicklung */}
-      {process.env.NODE_ENV === 'development' && (
-        <button
-          onClick={handleLogout}
-          className="fixed top-4 right-4 z-50 bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition-colors"
-        >
-          Logout
-        </button>
-      )}
       {children}
     </div>
   );

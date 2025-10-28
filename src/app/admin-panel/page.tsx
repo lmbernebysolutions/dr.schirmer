@@ -39,12 +39,21 @@ const AdminPanel: React.FC = () => {
     try {
       // Load alert settings
       const alertData = await import('@/data/alert-settings.json');
-      setAlertSettings(alertData.default || alertData);
+      const alertSettings = alertData.default || alertData;
+      setAlertSettings(alertSettings as AlertSettings);
 
       // Load news posts
       const newsData = await import('@/data/news-posts.json');
       const data = newsData.default || newsData;
-      const posts = Array.isArray(data) ? data : data.posts || [];
+      
+      // Handle both array format and object with posts property
+      let posts: NewsPost[] = [];
+      if (Array.isArray(data)) {
+        posts = data as NewsPost[];
+      } else if (data && typeof data === 'object' && 'posts' in data) {
+        posts = (data as { posts: NewsPost[] }).posts;
+      }
+      
       setNewsPosts(posts);
     } catch (error) {
       console.error('Error loading data:', error);

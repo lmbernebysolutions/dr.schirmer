@@ -39,40 +39,13 @@ const AdminDashboard = () => {
 
   const fetchPosts = async () => {
     try {
-      // Static news posts for Vercel deployment
-      const staticPosts: NewsPost[] = [
-        {
-          id: "1",
-          title: "Praxis-Urlaub",
-          description: "Vom 15. bis 30. Dezember bleibt unsere Praxis geschlossen. In dringenden Fällen wenden Sie sich an den ärztlichen Bereitschaftsdienst.",
-          date: "2024-12-01",
-          icon: "calendar",
-          color: "yellow",
-          published: true
-        },
-        {
-          id: "2",
-          title: "Grippe-Impfung",
-          description: "Die Grippe-Impfung ist jetzt verfügbar. Vereinbaren Sie Ihren Termin für eine rechtzeitige Impfung vor der Grippesaison.",
-          date: "2024-11-15",
-          icon: "heart",
-          color: "red",
-          published: true
-        },
-        {
-          id: "3",
-          title: "Neue Praxissoftware",
-          description: "Wir haben unsere Praxissoftware modernisiert. Online-Terminbuchung und E-Rezepte sind jetzt verfügbar.",
-          date: "2024-11-01",
-          icon: "shield",
-          color: "yellow",
-          published: true
-        }
-      ];
-      
-      setPosts(staticPosts);
+      const response = await fetch('/api/cms/news');
+      if (response.ok) {
+        const data = await response.json();
+        setPosts(data);
+      }
     } catch (error) {
-      console.error('Error loading posts:', error);
+      console.error('Error fetching posts:', error);
     } finally {
       setLoading(false);
     }
@@ -81,38 +54,67 @@ const AdminDashboard = () => {
   const handleDelete = async (id: string) => {
     if (!confirm('Möchten Sie diesen Beitrag wirklich löschen?')) return;
     
-    // For Vercel static deployment, show info message
-    alert('⚠️ Hinweis: In der statischen Vercel-Version können News-Änderungen nur lokal gespeichert werden.\n\nUm dauerhafte Änderungen zu machen, müssen Sie den Code direkt bearbeiten und neu deployen.');
-    
-    // Update local state (temporary)
-    const updatedPosts = posts.filter(post => post.id !== id);
-    setPosts(updatedPosts);
+    try {
+      const response = await fetch(`/api/cms/news?id=${id}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        fetchPosts();
+      } else {
+        alert('Fehler beim Löschen des Posts!');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Fehler beim Löschen des Posts!');
+    }
   };
 
   const handleTogglePublished = async (post: NewsPost) => {
-    // For Vercel static deployment, show info message
-    alert('⚠️ Hinweis: In der statischen Vercel-Version können News-Änderungen nur lokal gespeichert werden.\n\nUm dauerhafte Änderungen zu machen, müssen Sie den Code direkt bearbeiten und neu deployen.');
-    
-    // Update local state (temporary)
-    const updatedPosts = posts.map(p => 
-      p.id === post.id ? { ...p, published: !p.published } : p
-    );
-    setPosts(updatedPosts);
+    try {
+      const response = await fetch('/api/cms/news', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...post, published: !post.published })
+      });
+      
+      if (response.ok) {
+        fetchPosts();
+      } else {
+        alert('Fehler beim Aktualisieren des Posts!');
+      }
+    } catch (error) {
+      console.error('Error updating post:', error);
+      alert('Fehler beim Aktualisieren des Posts!');
+    }
   };
 
   const handleSave = async (post: NewsPost) => {
-    // For Vercel static deployment, show info message
-    alert('⚠️ Hinweis: In der statischen Vercel-Version können News-Änderungen nur lokal gespeichert werden.\n\nUm dauerhafte Änderungen zu machen, müssen Sie den Code direkt bearbeiten und neu deployen.');
-    
-    // Update local state (temporary)
-    const updatedPosts = posts.map(p => p.id === post.id ? post : p);
-    if (!posts.find(p => p.id === post.id)) {
-      updatedPosts.push(post);
+    try {
+      const response = await fetch('/api/cms/news', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...post,
+          id: post.id === 'new' ? Date.now().toString() : post.id
+        })
+      });
+      
+      if (response.ok) {
+        setEditingPost(null);
+        setShowForm(false);
+        fetchPosts();
+      } else {
+        alert('Fehler beim Speichern des Posts!');
+      }
+    } catch (error) {
+      console.error('Error saving post:', error);
+      alert('Fehler beim Speichern des Posts!');
     }
-    setPosts(updatedPosts);
-    
-    setEditingPost(null);
-    setShowForm(false);
   };
 
   const getIcon = (iconName: string) => {

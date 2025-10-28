@@ -38,22 +38,39 @@ const ResponsiveHeader = () => {
     return () => clearInterval(interval);
   }, [logos.length]);
 
-  // Load alert settings from static data and handle auto-expansion
+  // Load alert settings from static JSON file
   useEffect(() => {
-    // Static alert settings for Vercel deployment
-    const staticSettings = {
-      isVisible: true,
-      text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
-      lastUpdated: '2025-10-28T17:24:40.857Z'
+    const loadAlertSettings = async () => {
+      try {
+        // Import the JSON file directly
+        const alertData = await import('@/data/alert-settings.json');
+        const settings = alertData.default || alertData;
+        
+        setAlertSettings({
+          isVisible: settings.isVisible || true,
+          text: settings.text || 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
+          lastUpdated: settings.lastUpdated || new Date().toISOString()
+        });
+
+        // Auto-expand logic based on best practices
+        const shouldAutoExpand = checkIfShouldAutoExpand(settings.lastUpdated || new Date().toISOString());
+        if (shouldAutoExpand) {
+          setIsAlertExpanded(true);
+        }
+      } catch (error) {
+        console.error('Error loading alert settings:', error);
+        // Fallback to default settings
+        const fallbackSettings = {
+          isVisible: true,
+          text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
+          lastUpdated: new Date().toISOString()
+        };
+        setAlertSettings(fallbackSettings);
+        setIsAlertExpanded(true);
+      }
     };
 
-    setAlertSettings(staticSettings);
-
-    // Auto-expand logic based on best practices
-    const shouldAutoExpand = checkIfShouldAutoExpand(staticSettings.lastUpdated);
-    if (shouldAutoExpand) {
-      setIsAlertExpanded(true);
-    }
+    loadAlertSettings();
   }, []);
 
   // Professional auto-expansion logic following best practices

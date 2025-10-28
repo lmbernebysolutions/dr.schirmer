@@ -33,8 +33,20 @@ const NewsSection: React.FC = () => {
 
   const fetchPosts = async () => {
     try {
-      // Static news posts for Vercel deployment
-      const staticPosts: NewsPost[] = [
+      // Import the JSON file directly
+      const newsData = await import('@/data/news-posts.json');
+      const data = newsData.default || newsData;
+      
+      // Handle both array format and object with posts property
+      const posts = Array.isArray(data) ? data : data.posts || [];
+      
+      // Filter only published posts for display
+      const publishedPosts = posts.filter((post: NewsPost) => post.published);
+      setPosts(publishedPosts);
+    } catch (error) {
+      console.error('Error loading posts:', error);
+      // Fallback to default posts
+      const fallbackPosts: NewsPost[] = [
         {
           id: "1",
           title: "Praxis-Urlaub",
@@ -43,33 +55,9 @@ const NewsSection: React.FC = () => {
           icon: "calendar",
           color: "yellow",
           published: true
-        },
-        {
-          id: "2",
-          title: "Grippe-Impfung",
-          description: "Die Grippe-Impfung ist jetzt verfügbar. Vereinbaren Sie Ihren Termin für eine rechtzeitige Impfung vor der Grippesaison.",
-          date: "2024-11-15",
-          icon: "heart",
-          color: "red",
-          published: true
-        },
-        {
-          id: "3",
-          title: "Neue Praxissoftware",
-          description: "Wir haben unsere Praxissoftware modernisiert. Online-Terminbuchung und E-Rezepte sind jetzt verfügbar.",
-          date: "2024-11-01",
-          icon: "shield",
-          color: "yellow",
-          published: true
         }
       ];
-      
-      // Filter only published posts for display
-      const publishedPosts = staticPosts.filter((post: NewsPost) => post.published);
-      setPosts(publishedPosts);
-    } catch (error) {
-      console.error('Error loading posts:', error);
-      setPosts([]);
+      setPosts(fallbackPosts);
     } finally {
       setLoading(false);
     }

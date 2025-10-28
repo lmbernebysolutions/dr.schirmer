@@ -33,55 +33,41 @@ const AlertAdmin: React.FC = () => {
   const [selectedPost, setSelectedPost] = useState<NewsPost | null>(null);
   const [showNewsForm, setShowNewsForm] = useState(false);
 
-  // Load settings from static data on component mount
+  // Load settings from API on component mount
   useEffect(() => {
-    // Static alert settings for Vercel deployment
-    const staticSettings = {
-      isVisible: true,
-      text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
-      lastUpdated: '2025-10-28T17:24:40.857Z'
+    const loadSettings = async () => {
+      try {
+        const response = await fetch('/api/cms/alert');
+        if (response.ok) {
+          const apiSettings = await response.json();
+          console.log('🚨 Admin loaded settings from API:', apiSettings);
+          setAlertSettings(apiSettings);
+        }
+      } catch (error) {
+        console.error('Error loading from API in admin:', error);
+      }
     };
     
-    console.log('🚨 Admin loaded static settings:', staticSettings);
-    setAlertSettings(staticSettings);
+    loadSettings();
   }, []);
 
-  // Load news posts from static data
+  // Load news posts
   useEffect(() => {
     if (isAuthenticated) {
-      // Static news posts for Vercel deployment
-      const staticPosts: NewsPost[] = [
-        {
-          id: "1",
-          title: "Praxis-Urlaub",
-          description: "Vom 15. bis 30. Dezember bleibt unsere Praxis geschlossen. In dringenden Fällen wenden Sie sich an den ärztlichen Bereitschaftsdienst.",
-          date: "2024-12-01",
-          icon: "calendar",
-          color: "yellow",
-          published: true
-        },
-        {
-          id: "2",
-          title: "Grippe-Impfung",
-          description: "Die Grippe-Impfung ist jetzt verfügbar. Vereinbaren Sie Ihren Termin für eine rechtzeitige Impfung vor der Grippesaison.",
-          date: "2024-11-15",
-          icon: "heart",
-          color: "red",
-          published: true
-        },
-        {
-          id: "3",
-          title: "Neue Praxissoftware",
-          description: "Wir haben unsere Praxissoftware modernisiert. Online-Terminbuchung und E-Rezepte sind jetzt verfügbar.",
-          date: "2024-11-01",
-          icon: "shield",
-          color: "yellow",
-          published: true
+      const loadNewsPosts = async () => {
+        try {
+          const response = await fetch('/api/cms/news');
+          if (response.ok) {
+            const posts = await response.json();
+            console.log('Loading news posts:', posts);
+            setNewsPosts(posts);
+          }
+        } catch (error) {
+          console.error('Error loading news posts:', error);
         }
-      ];
+      };
       
-      console.log('Loading static news posts:', staticPosts);
-      setNewsPosts(staticPosts);
+      loadNewsPosts();
     }
   }, [isAuthenticated]);
 
@@ -97,42 +83,87 @@ const AlertAdmin: React.FC = () => {
   };
 
   const handleSave = async () => {
-    // For Vercel static deployment, show info message
-    alert('⚠️ Hinweis: In der statischen Vercel-Version können Änderungen nur lokal gespeichert werden.\n\nUm dauerhafte Änderungen zu machen, müssen Sie den Code direkt bearbeiten und neu deployen.');
-    
-    // Trigger a custom event to notify Header of changes (local only)
-    window.dispatchEvent(new CustomEvent('alertSettingsChanged'));
-    
-    setShowModal(false);
-    setIsAuthenticated(false);
+    try {
+      // Save to API
+      const response = await fetch('/api/cms/alert', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          isVisible: alertSettings.isVisible,
+          text: alertSettings.text
+        })
+      });
+
+      if (response.ok) {
+        console.log('🚨 Admin saved settings to API');
+        
+        // Trigger a custom event to notify Header of changes
+        window.dispatchEvent(new CustomEvent('alertSettingsChanged'));
+        
+        setShowModal(false);
+        setIsAuthenticated(false);
+      } else {
+        alert('Fehler beim Speichern!');
+      }
+    } catch (error) {
+      console.error('Error saving to API:', error);
+      alert('Fehler beim Speichern!');
+    }
   };
 
   const handleNewsSave = async (post: NewsPost) => {
-    // For Vercel static deployment, show info message
-    alert('⚠️ Hinweis: In der statischen Vercel-Version können News-Änderungen nur lokal gespeichert werden.\n\nUm dauerhafte Änderungen zu machen, müssen Sie den Code direkt bearbeiten und neu deployen.');
-    
-    // Update local state (temporary)
-    const updatedPosts = newsPosts.map(p => p.id === post.id ? post : p);
-    if (!newsPosts.find(p => p.id === post.id)) {
-      updatedPosts.push(post);
+    try {
+      const response = await fetch('/api/cms/news', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(post)
+      });
+
+      if (response.ok) {
+        // Reload news posts
+        const newsResponse = await fetch('/api/cms/news');
+        if (newsResponse.ok) {
+          const posts = await newsResponse.json();
+          setNewsPosts(posts);
+        }
+        window.dispatchEvent(new CustomEvent('newsUpdated'));
+        setShowNewsForm(false);
+        setSelectedPost(null);
+      } else {
+        alert('Fehler beim Speichern des Posts!');
+      }
+    } catch (error) {
+      console.error('Error saving news post:', error);
+      alert('Fehler beim Speichern des Posts!');
     }
-    setNewsPosts(updatedPosts);
-    
-    window.dispatchEvent(new CustomEvent('newsUpdated'));
-    setShowNewsForm(false);
-    setSelectedPost(null);
   };
 
   const handleNewsDelete = async (id: string) => {
     if (confirm('Möchten Sie diesen Post wirklich löschen?')) {
-      // For Vercel static deployment, show info message
-      alert('⚠️ Hinweis: In der statischen Vercel-Version können News-Änderungen nur lokal gespeichert werden.\n\nUm dauerhafte Änderungen zu machen, müssen Sie den Code direkt bearbeiten und neu deployen.');
-      
-      // Update local state (temporary)
-      const updatedPosts = newsPosts.filter(p => p.id !== id);
-      setNewsPosts(updatedPosts);
-      
-      window.dispatchEvent(new CustomEvent('newsUpdated'));
+      try {
+        const response = await fetch(`/api/cms/news?id=${id}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          // Reload news posts
+          const newsResponse = await fetch('/api/cms/news');
+          if (newsResponse.ok) {
+            const posts = await newsResponse.json();
+            setNewsPosts(posts);
+          }
+          window.dispatchEvent(new CustomEvent('newsUpdated'));
+        } else {
+          alert('Fehler beim Löschen des Posts!');
+        }
+      } catch (error) {
+        console.error('Error deleting news post:', error);
+        alert('Fehler beim Löschen des Posts!');
+      }
     }
   };
 

@@ -3,7 +3,7 @@
     "id": "1",
     "title": "Praxis-Urlaub",
     "description": "Vom 15. bis 30. Dezember bleibt unsere Praxis geschlossen. In dringenden Fällen wenden Sie sich an den ärztlichen Bereitschaftsdienst.",
-    "date": "2024-12-01",
+    "date": "2024-12-01T00:00:00.000Z",
     "icon": "calendar",
     "color": "yellow",
     "published": true
@@ -12,7 +12,7 @@
     "id": "2",
     "title": "Grippe-Impfung",
     "description": "Die Grippe-Impfung ist jetzt verfügbar. Vereinbaren Sie Ihren Termin für eine rechtzeitige Impfung vor der Grippesaison.",
-    "date": "2024-11-15",
+    "date": "2024-11-15T00:00:00.000Z",
     "icon": "heart",
     "color": "red",
     "published": true
@@ -21,7 +21,7 @@
     "id": "3",
     "title": "Neue Praxissoftware",
     "description": "Wir haben unsere Praxissoftware modernisiert. Online-Terminbuchung und E-Rezepte sind jetzt verfügbar.",
-    "date": "2024-11-01",
+    "date": "2024-11-01T00:00:00.000Z",
     "icon": "shield",
     "color": "yellow",
     "published": true

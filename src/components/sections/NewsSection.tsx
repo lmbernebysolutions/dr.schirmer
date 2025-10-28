@@ -2,16 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Calendar, Heart, Shield } from 'lucide-react';
-
-interface NewsPost {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  icon: string;
-  color: string;
-  published: boolean;
-}
+import { NewsPost } from '@/types/notion';
+import { getNewsPosts } from '@/lib/notion-helpers';
 
 const NewsSection: React.FC = () => {
   const [posts, setPosts] = useState<NewsPost[]>([]);
@@ -27,61 +19,69 @@ const NewsSection: React.FC = () => {
       fetchPosts();
     };
 
-    const handleNewsPostsUpdate = (event: CustomEvent) => {
-      const posts = event.detail;
-      const publishedPosts = posts.filter((post: NewsPost) => post.published);
-      setPosts(publishedPosts);
-    };
-
     window.addEventListener('newsUpdated', handleNewsUpdate);
-    window.addEventListener('newsPostsUpdated', handleNewsPostsUpdate as EventListener);
-    
-    return () => {
-      window.removeEventListener('newsUpdated', handleNewsUpdate);
-      window.removeEventListener('newsPostsUpdated', handleNewsPostsUpdate as EventListener);
-    };
+    return () => window.removeEventListener('newsUpdated', handleNewsUpdate);
   }, []);
 
   const fetchPosts = async () => {
     try {
-      // First try to load from localStorage (admin panel changes)
-      const localPosts = localStorage.getItem('newsPosts');
-      if (localPosts) {
-        const posts = JSON.parse(localPosts);
+      // Try to load from Notion API first
+      const notionPosts = await getNewsPosts();
+      
+      if (notionPosts && notionPosts.length > 0) {
+        // Filter only published posts for display
+        const publishedPosts = notionPosts.filter((post: NewsPost) => post.published);
+        setPosts(publishedPosts);
+      } else {
+        // Fallback to static JSON file
+        const newsData = await import('@/data/news-posts.json');
+        const data = newsData.default || newsData;
+        
+        // Handle both array format and object with posts property
+        let posts: NewsPost[] = [];
+        if (Array.isArray(data)) {
+          posts = data as NewsPost[];
+        } else if (data && typeof data === 'object' && 'posts' in data) {
+          posts = (data as { posts: NewsPost[] }).posts;
+        }
+        
+        // Filter only published posts for display
         const publishedPosts = posts.filter((post: NewsPost) => post.published);
         setPosts(publishedPosts);
-        return;
       }
-
-      // Fallback to static JSON file
-      const newsData = await import('@/data/news-posts.json');
-      const data = newsData.default || newsData;
-      
-      let posts: NewsPost[] = [];
-      if (Array.isArray(data)) {
-        posts = data as NewsPost[];
-      } else if (data && typeof data === 'object' && 'posts' in data) {
-        posts = (data as { posts: NewsPost[] }).posts;
-      }
-      
-      // Filter only published posts for display
-      const publishedPosts = posts.filter((post: NewsPost) => post.published);
-      setPosts(publishedPosts);
     } catch (error) {
       console.error('Error loading posts:', error);
-      // Fallback to default posts
-      const fallbackPosts: NewsPost[] = [
-        {
-          id: "1",
-          title: "Praxis-Urlaub",
-          description: "Vom 15. bis 30. Dezember bleibt unsere Praxis geschlossen. In dringenden Fällen wenden Sie sich an den ärztlichen Bereitschaftsdienst.",
-          date: "2024-12-01",
-          icon: "calendar",
-          color: "yellow",
-          published: true
+      // Fallback to static JSON file
+      try {
+        const newsData = await import('@/data/news-posts.json');
+        const data = newsData.default || newsData;
+        
+        // Handle both array format and object with posts property
+        let posts: NewsPost[] = [];
+        if (Array.isArray(data)) {
+          posts = data as NewsPost[];
+        } else if (data && typeof data === 'object' && 'posts' in data) {
+          posts = (data as { posts: NewsPost[] }).posts;
         }
-      ];
-      setPosts(fallbackPosts);
+        
+        // Filter only published posts for display
+        const publishedPosts = posts.filter((post: NewsPost) => post.published);
+        setPosts(publishedPosts);
+      } catch (fallbackError) {
+        console.error('Error loading fallback posts:', fallbackError);
+        const fallbackPosts: NewsPost[] = [
+          {
+            id: "1",
+            title: "Praxis-Urlaub",
+            description: "Vom 15. bis 30. Dezember bleibt unsere Praxis geschlossen. In dringenden Fällen wenden Sie sich an den ärztlichen Bereitschaftsdienst.",
+            date: "2024-12-01",
+            icon: "calendar",
+            color: "yellow",
+            published: true
+          }
+        ];
+        setPosts(fallbackPosts);
+      }
     } finally {
       setLoading(false);
     }

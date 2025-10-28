@@ -18,6 +18,7 @@ import {
   Building2
 } from 'lucide-react';
 import MedicalIcon from '../ui/MedicalIcon';
+import AlertAdmin from '../admin/AlertAdmin';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -143,13 +144,7 @@ const Footer = () => {
               © {currentYear} Hausarztpraxis Dr. Schirmer. Alle Rechte vorbehalten.
             </p>
             <div className="flex items-center space-x-4">
-              <Link
-                href="/admin-panel"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-              >
-                <Shield className="w-4 h-4 mr-2" />
-                Admin
-              </Link>
+              <AlertAdmin />
             </div>
           </div>
         </div>

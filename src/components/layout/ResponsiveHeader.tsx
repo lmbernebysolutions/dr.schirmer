@@ -4,12 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Menu, X, Bell, ChevronDown, ChevronUp } from 'lucide-react';
-
-interface AlertSettings {
-  isVisible: boolean;
-  text: string;
-  lastUpdated: string;
-}
+import { AlertSettings } from '@/types/notion';
+import { getAlertSettings } from '@/lib/notion-helpers';
 
 const ResponsiveHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,71 +34,67 @@ const ResponsiveHeader = () => {
     return () => clearInterval(interval);
   }, [logos.length]);
 
-  // Load alert settings from localStorage or static JSON file
+  // Load alert settings from Notion API
   useEffect(() => {
     const loadAlertSettings = async () => {
       try {
-        // First try to load from localStorage (admin panel changes)
-        const localSettings = localStorage.getItem('alertSettings');
-        if (localSettings) {
-          const settings = JSON.parse(localSettings);
+        // Try to load from Notion API first
+        const settings = await getAlertSettings();
+        
+        if (settings) {
           setAlertSettings(settings);
           
-          // Auto-expand logic based on best practices
           const shouldAutoExpand = checkIfShouldAutoExpand(settings.lastUpdated);
           if (shouldAutoExpand) {
             setIsAlertExpanded(true);
           }
-          return;
-        }
+        } else {
+          // Fallback to static JSON file
+          const alertData = await import('@/data/alert-settings.json');
+          const fallbackSettings = alertData.default || alertData;
+          
+          setAlertSettings({
+            isVisible: fallbackSettings.isVisible || true,
+            text: fallbackSettings.text || 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
+            lastUpdated: fallbackSettings.lastUpdated || new Date().toISOString()
+          });
 
-        // Fallback to static JSON file
-        const alertData = await import('@/data/alert-settings.json');
-        const settings = alertData.default || alertData;
-        
-        setAlertSettings({
-          isVisible: settings.isVisible || true,
-          text: settings.text || 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
-          lastUpdated: settings.lastUpdated || new Date().toISOString()
-        });
-
-        // Auto-expand logic based on best practices
-        const shouldAutoExpand = checkIfShouldAutoExpand(settings.lastUpdated || new Date().toISOString());
-        if (shouldAutoExpand) {
-          setIsAlertExpanded(true);
+          const shouldAutoExpand = checkIfShouldAutoExpand(fallbackSettings.lastUpdated || new Date().toISOString());
+          if (shouldAutoExpand) {
+            setIsAlertExpanded(true);
+          }
         }
       } catch (error) {
         console.error('Error loading alert settings:', error);
-        // Fallback to default settings
-        const fallbackSettings = {
-          isVisible: true,
-          text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
-          lastUpdated: new Date().toISOString()
-        };
-        setAlertSettings(fallbackSettings);
-        setIsAlertExpanded(true);
+        // Fallback to static JSON file
+        try {
+          const alertData = await import('@/data/alert-settings.json');
+          const fallbackSettings = alertData.default || alertData;
+          
+          setAlertSettings({
+            isVisible: fallbackSettings.isVisible || true,
+            text: fallbackSettings.text || 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
+            lastUpdated: fallbackSettings.lastUpdated || new Date().toISOString()
+          });
+
+          const shouldAutoExpand = checkIfShouldAutoExpand(fallbackSettings.lastUpdated || new Date().toISOString());
+          if (shouldAutoExpand) {
+            setIsAlertExpanded(true);
+          }
+        } catch (fallbackError) {
+          console.error('Error loading fallback alert settings:', fallbackError);
+          const defaultSettings = {
+            isVisible: true,
+            text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
+            lastUpdated: new Date().toISOString()
+          };
+          setAlertSettings(defaultSettings);
+          setIsAlertExpanded(true);
+        }
       }
     };
 
     loadAlertSettings();
-
-    // Listen for admin panel updates
-    const handleAlertUpdate = (event: CustomEvent) => {
-      const newSettings = event.detail;
-      setAlertSettings(newSettings);
-      
-      // Check if should auto-expand after update
-      const shouldAutoExpand = checkIfShouldAutoExpand(newSettings.lastUpdated);
-      if (shouldAutoExpand) {
-        setIsAlertExpanded(true);
-      }
-    };
-
-    window.addEventListener('alertSettingsUpdated', handleAlertUpdate as EventListener);
-    
-    return () => {
-      window.removeEventListener('alertSettingsUpdated', handleAlertUpdate as EventListener);
-    };
   }, []);
 
   // Professional auto-expansion logic following best practices

@@ -41,7 +41,7 @@ const LabServices: React.FC = () => {
     <section id="labor" className="section-padding-sm bg-section-primary">
       <div className="container mx-auto px-6">
         <div className="text-center element-spacing-xl">
-          <h2 className="text-xl md:text-4xl font-bold text-gray-900 element-spacing">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 element-spacing">
             <span className="hidden sm:inline">Laboruntersuchungen</span>
             <span className="sm:hidden">Labor</span>
           </h2>

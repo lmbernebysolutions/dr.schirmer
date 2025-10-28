@@ -15,7 +15,7 @@ const PasswordProtection: React.FC<PasswordProtectionProps> = ({ children }) => 
   const [isLoading, setIsLoading] = useState(true);
 
   // Website-Passwort
-  const WEBSITE_PASSWORD = 'DrSchirmer2024!';
+  const WEBSITE_PASSWORD = 'DrSchirmer2025!';
 
   useEffect(() => {
     // Prüfe ob bereits authentifiziert

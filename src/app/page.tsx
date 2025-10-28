@@ -114,33 +114,33 @@ const HomePage: React.FC = () => {
           
           <div className="hidden lg:flex justify-center">
             {/* Zwei größere Praxis-Kreise zentriert */}
-            <div className="flex gap-10 items-center">
+            <div className="flex gap-12 items-center">
                 <div className="flex flex-col items-center">
-                  <div className="w-56 h-56 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 overflow-hidden hover:from-amber-500 hover:to-yellow-500">
+                  <div className="w-72 h-72 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 overflow-hidden hover:from-amber-500 hover:to-yellow-500">
                     <ResponsiveImage 
                       src="/images/logo01.jpg" 
                       alt="Praxis Zschorlau Logo" 
                       className="w-full h-full object-cover rounded-full"
-                      sizes="(max-width: 768px) 0px, 224px"
+                      sizes="(max-width: 768px) 0px, 288px"
                       priority={true}
                     />
               </div>
-                  <span className="text-gray-900 font-bold mt-4 text-lg">Zschorlau</span>
-                  <span className="text-yellow-600 text-base font-medium">Hauptstandort</span>
+                  <span className="text-gray-900 font-bold mt-4 text-xl">Zschorlau</span>
+                  <span className="text-yellow-600 text-lg font-medium">Hauptstandort</span>
             </div>
                 
                 <div className="flex flex-col items-center">
-                  <div className="w-56 h-56 bg-[#FF0000] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 overflow-hidden hover:bg-[#CC0000]">
+                  <div className="w-72 h-72 bg-[#FF0000] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 overflow-hidden hover:bg-[#CC0000]">
                     <ResponsiveImage 
                       src="/images/logo02.jpg" 
                       alt="Praxis Aue Logo" 
                       className="w-full h-full object-cover rounded-full"
-                      sizes="(max-width: 768px) 0px, 224px"
+                      sizes="(max-width: 768px) 0px, 288px"
                       priority={true}
                     />
                   </div>
-                  <span className="text-gray-900 font-bold mt-4 text-lg">Aue</span>
-                  <span className="text-red-600 text-base font-medium">Zweigstelle</span>
+                  <span className="text-gray-900 font-bold mt-4 text-xl">Aue</span>
+                  <span className="text-red-600 text-lg font-medium">Zweigstelle</span>
                 </div>
             </div>
           </div>

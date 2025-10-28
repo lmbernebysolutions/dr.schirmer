@@ -4,6 +4,7 @@ import './globals.css';
 import ResponsiveHeader from '@/components/layout/ResponsiveHeader';
 import Footer from '@/components/layout/Footer';
 import { Providers } from '@/components/Providers';
+import PasswordProtection from '@/components/PasswordProtection';
 
 // Font configuration - Organic & Human-Centric
 const quicksand = Quicksand({
@@ -151,22 +152,24 @@ export default function RootLayout({
         />
       </head>
       <body className={`${quicksand.className} antialiased`}>
-        <Providers>
-          <div className="min-h-screen flex flex-col">
-            <ResponsiveHeader />
-            
-            {/* Skip Links für Accessibility */}
-            <a href="#main-content" className="skip-link">
-              Zum Hauptinhalt springen
-            </a>
-            
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
-            
-            <Footer />
-          </div>
-        </Providers>
+        <PasswordProtection>
+          <Providers>
+            <div className="min-h-screen flex flex-col">
+              <ResponsiveHeader />
+              
+              {/* Skip Links für Accessibility */}
+              <a href="#main-content" className="skip-link">
+                Zum Hauptinhalt springen
+              </a>
+              
+              <main id="main-content" className="flex-1">
+                {children}
+              </main>
+              
+              <Footer />
+            </div>
+          </Providers>
+        </PasswordProtection>
       </body>
     </html>
   );

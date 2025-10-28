@@ -168,8 +168,8 @@ const ResponsiveHeader = () => {
               <Link href="/" className="flex items-center h-12 sm:h-16 md:h-18 lg:h-20 ml-4 sm:ml-6">
                 <motion.img 
                   key={currentLogoIndex}
-                  src={logos[currentLogoIndex].src}
-                  alt={logos[currentLogoIndex].alt}
+                  src={logos[currentLogoIndex]?.src || ''}
+                  alt={logos[currentLogoIndex]?.alt || ''}
                   className="h-full w-auto object-contain max-w-full"
                   loading="eager"
                   decoding="async"

@@ -16,6 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         displayType="banner"
         theme="light"
         disableGeolocation={true}
+        disableAutomaticBlocking={true}
         cookieCategories={{
           Analytics: false,  // Nicht verwendet auf der Website - entfernt
           Social: true,  // Wird als "Externe Dienste" für Google Maps verwendet

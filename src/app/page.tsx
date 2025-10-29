@@ -1,7 +1,6 @@
 'use client';
 
 import React, { Suspense, lazy } from 'react';
-import { useCookieConsent } from 'react-cookie-manager';
 import { 
   MapPin, 
   Phone, 
@@ -24,13 +23,15 @@ import {
   Globe,
   Baby,
   TestTube,
-  Home
+  Home,
+  Lock
 } from 'lucide-react';
 import ResponsiveImage from '@/components/ui/ResponsiveImage';
 import ResponsiveHeader from '@/components/layout/ResponsiveHeader';
 import SectionDivider from '@/components/ui/SectionDivider';
 import { SERVICES, IGeL_SERVICES } from '@/config/services';
 import { PRACTICES } from '@/config/company';
+import { useCookieConsent } from 'react-cookie-manager';
 
 // Lazy load alle Sektionen
 const DoctorsTeam = lazy(() => import('@/components/sections/DoctorsTeam'));
@@ -50,17 +51,178 @@ const SectionLoader = () => (
 const HomePage: React.FC = () => {
   const [selectedMap, setSelectedMap] = React.useState<'zschorlau' | 'aue'>('zschorlau');
   const [showPhoneModal, setShowPhoneModal] = React.useState(false);
-  
-  // Verwende den useCookieConsent Hook für professionelle Consent-Verwaltung
+  const [mapsIframeRef, setMapsIframeRef] = React.useState<HTMLIFrameElement | null>(null);
   const { detailedConsent, openPreferencesModal } = useCookieConsent();
-  
-  // Prüfe Cookie-Consent für Google Maps (DSGVO-konform)
-  // Google Maps verwendet jetzt die "Social"-Kategorie (als "Externe Dienste" bezeichnet)
-  const mapsConsent = React.useMemo(() => {
-    if (!detailedConsent) return false;
-    // detailedConsent.Social ist ein ConsentStatus-Objekt mit { consented: boolean, timestamp: string }
-    return detailedConsent.Social?.consented === true;
-  }, [detailedConsent]);
+
+  // Prüfe ob Social-Cookies (Externe Dienste) erlaubt sind
+  const hasSocialConsent = detailedConsent?.Social?.consented === true;
+
+  // Google Maps URLs
+  const mapsUrls = {
+    zschorlau: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2534.380256760598!2d12.6380256763231!3d50.56429417161414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a0c96ff2447a0b%3A0x1902c32d6d842b20!2sSchneeberger%20Str.%203%2C%2008321%20Zschorlau!5e0!3m2!1sen!2sde!4v1761333014395!5m2!1sen!2sde",
+    aue: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2533.2180119553846!2d12.701939776324465!3d50.58590107161833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a0ca13bd023821%3A0x7ebb9bce54aecac7!2sSchwarzenberger%20Str.%207%2C%2008280%20Aue-Bad%20Schlema!5e0!3m2!1sen!2sde!4v1761333046361!5m2!1sen!2sde"
+  };
+
+  // Entferne Cookie-Manager Blöcke und setze iframe src dynamisch
+  React.useEffect(() => {
+    if (!hasSocialConsent || !mapsIframeRef) return;
+
+    // Cleanup-Funktion: Entferne alle Blöcke für unser spezifisches iframe
+    const cleanup = () => {
+      if (!mapsIframeRef || !document.body.contains(mapsIframeRef)) return;
+      
+      try {
+        const targetUrl = mapsUrls[selectedMap];
+        
+        // Prüfe ob unser iframe direkt blockiert wurde
+        if (mapsIframeRef.hasAttribute('data-cookie-blocked')) {
+          const originalSrc = mapsIframeRef.getAttribute('data-original-src') || targetUrl;
+          
+          // Stelle iframe wieder her
+          mapsIframeRef.src = originalSrc;
+          mapsIframeRef.removeAttribute('data-cookie-blocked');
+          mapsIframeRef.removeAttribute('data-original-src');
+          
+          // Entferne Wrapper, falls vorhanden
+          const wrapper = mapsIframeRef.parentElement;
+          if (wrapper && wrapper.parentElement && document.body.contains(wrapper)) {
+            // Prüfe ob es ein Cookie-Manager-Wrapper ist
+            if (wrapper.querySelector('[data-cookie-consent-placeholder="true"]') || 
+                wrapper.classList.contains('cookie-consent-blocked-iframe-wrapper')) {
+              const parent = wrapper.parentElement;
+              if (parent && parent.contains(wrapper) && parent.contains(mapsIframeRef)) {
+                try {
+                  parent.insertBefore(mapsIframeRef, wrapper);
+                  if (document.body.contains(wrapper)) {
+                    wrapper.remove();
+                  }
+                } catch (e) {
+                  // Ignoriere removeChild Fehler
+                }
+              }
+            }
+          }
+          
+          // Stelle sicher, dass src korrekt ist
+          if (mapsIframeRef.src !== targetUrl && mapsIframeRef.src !== originalSrc) {
+            mapsIframeRef.src = targetUrl;
+          }
+        }
+        
+        // Prüfe auf Placeholder-Wrapper die unser iframe enthalten
+        const placeholders = document.querySelectorAll('[data-cookie-consent-placeholder="true"][data-blocked-src*="google.com/maps"]');
+        placeholders.forEach((placeholder) => {
+          try {
+            const wrapper = placeholder.parentElement;
+            if (!wrapper || !document.body.contains(wrapper)) return;
+            
+            // Prüfe ob unser iframe in diesem Wrapper ist
+            const iframeInWrapper = wrapper.querySelector('iframe');
+            if (iframeInWrapper === mapsIframeRef || wrapper.contains(mapsIframeRef)) {
+              const blockedSrc = placeholder.getAttribute('data-blocked-src') || targetUrl;
+              const parent = wrapper.parentElement;
+              
+              if (parent && parent.contains(wrapper)) {
+                try {
+                  // Stelle iframe src wieder her
+                  if (mapsIframeRef) {
+                    mapsIframeRef.src = blockedSrc;
+                    mapsIframeRef.removeAttribute('data-cookie-blocked');
+                    mapsIframeRef.removeAttribute('data-original-src');
+                    
+                    // Verschiebe iframe aus Wrapper
+                    parent.insertBefore(mapsIframeRef, wrapper);
+                  }
+                  
+                  // Entferne Wrapper
+                  if (document.body.contains(wrapper)) {
+                    wrapper.remove();
+                  }
+                } catch (e) {
+                  // Ignoriere Fehler
+                }
+              }
+            }
+          } catch (e) {
+            // Ignoriere Fehler
+          }
+        });
+        
+        // Stelle sicher, dass src korrekt gesetzt ist
+        if (mapsIframeRef && mapsIframeRef.src !== targetUrl && 
+            mapsIframeRef.src !== 'about:blank' &&
+            !mapsIframeRef.hasAttribute('data-cookie-blocked')) {
+          mapsIframeRef.src = targetUrl;
+        }
+      } catch (e) {
+        // Ignoriere globale Fehler
+      }
+    };
+
+    // Setze iframe src nach kurzem Delay, um Cookie Manager zu umgehen
+    const setSrc = () => {
+      if (!mapsIframeRef || !hasSocialConsent) return;
+
+      // Warte, bis React das DOM aktualisiert hat
+      setTimeout(() => {
+        if (!mapsIframeRef || !hasSocialConsent) return;
+
+        const targetUrl = mapsUrls[selectedMap];
+        
+        // Stelle sicher, dass iframe noch im DOM ist
+        if (!document.body.contains(mapsIframeRef)) return;
+        
+        // Setze src direkt
+        mapsIframeRef.src = targetUrl;
+        
+        // Kontinuierliche Cleanup-Schleife für 5 Sekunden, um Blockierung zu verhindern
+        let cleanupCount = 0;
+        const maxCleanups = 25; // 5 Sekunden bei 200ms Intervall
+        
+        const cleanupInterval = setInterval(() => {
+          cleanup();
+          cleanupCount++;
+          
+          // Stoppe nach maxCleanups oder wenn iframe nicht mehr blockiert ist
+          if (cleanupCount >= maxCleanups) {
+            clearInterval(cleanupInterval);
+            return;
+          }
+          
+          // Prüfe ob iframe noch blockiert ist
+          const isStillBlocked = mapsIframeRef.hasAttribute('data-cookie-blocked') ||
+            mapsIframeRef.src === 'about:blank' ||
+            mapsIframeRef.closest('[data-cookie-consent-placeholder="true"]');
+          
+          if (!isStillBlocked && mapsIframeRef.src === targetUrl) {
+            // iframe ist nicht mehr blockiert, stoppe Cleanup
+            clearInterval(cleanupInterval);
+          }
+        }, 200);
+        
+        // Cleanup sofort
+        cleanup();
+        
+        // Zusätzlicher Cleanup nach kurzer Zeit
+        setTimeout(() => {
+          cleanup();
+        }, 100);
+        
+        // Finale Cleanup nach längerer Zeit
+        setTimeout(() => {
+          cleanup();
+          clearInterval(cleanupInterval);
+        }, 1000);
+      }, 300);
+    };
+
+    // Führe setSrc aus, wenn iframe ref verfügbar ist
+    const timer = setTimeout(setSrc, 100);
+    
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [hasSocialConsent, selectedMap, mapsIframeRef, mapsUrls]);
 
   const handlePhoneCall = (practice: 'zschorlau' | 'aue') => {
     const phoneNumber = practice === 'zschorlau' ? '037715653950' : '0377120208';
@@ -829,13 +991,16 @@ const HomePage: React.FC = () => {
                   </p>
                 </div>
                 
-                <div className="mt-6">
-                  {mapsConsent ? (
+                <div 
+                  className="mt-6"
+                  key={`map-container-${hasSocialConsent ? 'allowed' : 'blocked'}-${selectedMap}`}
+                >
+                  {hasSocialConsent ? (
+                    /* Google Maps iframe - wird nur angezeigt wenn Social-Cookies (Externe Dienste) erlaubt sind */
                     <iframe
-                      src={selectedMap === 'zschorlau' 
-                        ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2534.380256760598!2d12.6380256763231!3d50.56429417161414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a0c96ff2447a0b%3A0x1902c32d6d842b20!2sSchneeberger%20Str.%203%2C%2008321%20Zschorlau!5e0!3m2!1sen!2sde!4v1761333014395!5m2!1sen!2sde"
-                        : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2533.2180119553846!2d12.701939776324465!3d50.58590107161833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a0ca13bd023821%3A0x7ebb9bce54aecac7!2sSchwarzenberger%20Str.%207%2C%2008280%20Aue-Bad%20Schlema!5e0!3m2!1sen!2sde!4v1761333046361!5m2!1sen!2sde"
-                      }
+                      key={`map-iframe-${selectedMap}-${hasSocialConsent}`}
+                      ref={(el) => setMapsIframeRef(el)}
+                      src="about:blank"
                       width="100%"
                       height="250"
                       style={{ border: 0, borderRadius: '1rem' }}
@@ -845,49 +1010,24 @@ const HomePage: React.FC = () => {
                       title={`Praxis ${selectedMap === 'zschorlau' ? 'Zschorlau' : 'Aue'} - Google Maps`}
                     ></iframe>
                   ) : (
-                    <div className="bg-gray-100 rounded-lg p-8 text-center border-2 border-gray-300">
-                      <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <h4 className="font-semibold text-gray-700 mb-2">Karte wird geladen</h4>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Um die Karte anzuzeigen, benötigen wir Ihre Zustimmung für externe Dienste wie Google Maps.
-                      </p>
-                      <p className="text-xs text-gray-500 mb-4">
-                        Google Maps überträgt Daten in die USA. Bitte akzeptieren Sie "Externe Dienste" in den Cookie-Einstellungen, um die Karte zu sehen. Diese Einstellung ist optional - Sie können die Website auch ohne Google Maps nutzen.
+                    /* Placeholder wenn keine Cookie-Zustimmung für externe Dienste */
+                    <div 
+                      className="w-full rounded-xl bg-gray-900 flex flex-col items-center justify-center text-center p-8"
+                      style={{ height: '250px', borderRadius: '1rem' }}
+                    >
+                      <Lock className="w-12 h-12 text-gray-400 mb-4" />
+                      <h4 className="text-lg font-bold text-white mb-2">
+                        Karte blockiert
+                      </h4>
+                      <p className="text-gray-300 text-sm mb-4 max-w-md">
+                        Um die Karte anzuzeigen, müssen Sie der Nutzung von externen Diensten (Google Maps) in den Cookie-Einstellungen zustimmen.
                       </p>
                       <button
-                        onClick={() => {
-                          // Öffne Cookie-Einstellungen via Cookie-Manager Hook
-                          if (openPreferencesModal) {
-                            openPreferencesModal();
-                          } else {
-                            // Fallback: Suche nach dem Floating Cookie Button
-                            const cookieButton = document.querySelector('[data-cookie-manager], button[aria-label*="Cookie"], button[aria-label*="cookie"]') as HTMLElement;
-                            if (cookieButton) {
-                              cookieButton.click();
-                            } else {
-                              // Fallback: Scroll zum Cookie Banner falls vorhanden
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }
-                          }
-                        }}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                        onClick={openPreferencesModal}
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full transition-colors duration-300"
                       >
                         Cookie-Einstellungen öffnen
                       </button>
-                      <p className="text-xs text-gray-500 mt-4">
-                        Oder nutzen Sie die{' '}
-                        <a
-                          href={selectedMap === 'zschorlau'
-                            ? 'https://www.google.com/maps/dir/?api=1&destination=Schneeberger+Straße+3,+08321+Zschorlau'
-                            : 'https://www.google.com/maps/dir/?api=1&destination=Schwarzenberger+Straße+7,+08280+Aue'
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                        >
-                          Routenplanung in Google Maps
-                        </a>
-                      </p>
                     </div>
                   )}
                 </div>

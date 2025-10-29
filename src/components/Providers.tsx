@@ -17,7 +17,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         theme="light"
         disableGeolocation={true}
         cookieCategories={{
-          Analytics: true,
+          Analytics: false,  // Nicht verwendet auf der Website - entfernt
           Social: true,  // Wird als "Externe Dienste" für Google Maps verwendet
           Advertising: false  // Nicht verwendet auf der Website
         }}

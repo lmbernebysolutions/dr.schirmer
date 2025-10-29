@@ -555,7 +555,12 @@ const HomePage: React.FC = () => {
                 </div>
                 <div className="text-center">
                   <button 
-                    onClick={() => window.open('https://www.medizin.uni-dresden.de/studium/lehrpraxen', '_blank')}
+                    onClick={() => {
+                      const contactSection = document.getElementById('contact');
+                      if (contactSection) {
+                        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }}
                     className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white rounded-full px-6 py-3 font-bold hover:from-amber-500 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                   >
                     Mehr erfahren

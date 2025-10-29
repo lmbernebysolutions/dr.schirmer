@@ -17,8 +17,6 @@ const resources = {
       manageEssentialSubtitle: "Diese Cookies sind für die Grundfunktionen der Website erforderlich. Sie ermöglichen die Session-Verwaltung, Sicherheitsfunktionen und die Speicherung Ihrer Cookie-Einstellungen.",
       manageEssentialStatus: "Status: Immer aktiviert",
       manageEssentialStatusButtonText: "Immer an",
-      manageAnalyticsTitle: "Analytische Cookies",
-      manageAnalyticsSubtitle: "Diese Cookies helfen der Hausarztpraxis Dr. Schirmer zu verstehen, wie Besucher mit unserer Website interagieren. Sie werden für statistische Auswertungen und zur Verbesserung unserer Online-Präsenz verwendet. (Bspw. Google Analytics, falls aktiviert)",
       manageSocialTitle: "Externe Dienste",
       manageSocialSubtitle: "Diese Cookies ermöglichen die Nutzung externer Dienste wie Google Maps. Google Maps wird für die Routenplanung zu unseren Praxen in Zschorlau und Aue verwendet. Bitte beachten Sie, dass Google Maps Daten in die USA überträgt. Diese Kategorie ist optional - Sie können die Website auch ohne Google Maps nutzen.",
       manageCookiesStatus: "Status: {{status}} am {{date}}",

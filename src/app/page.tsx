@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Suspense, lazy } from 'react';
+import { useCookieConsent } from 'react-cookie-manager';
 import { 
   MapPin, 
   Phone, 
@@ -49,40 +50,17 @@ const SectionLoader = () => (
 const HomePage: React.FC = () => {
   const [selectedMap, setSelectedMap] = React.useState<'zschorlau' | 'aue'>('zschorlau');
   const [showPhoneModal, setShowPhoneModal] = React.useState(false);
-  const [mapsConsent, setMapsConsent] = React.useState(false);
+  
+  // Verwende den useCookieConsent Hook für professionelle Consent-Verwaltung
+  const { detailedConsent, openPreferencesModal } = useCookieConsent();
   
   // Prüfe Cookie-Consent für Google Maps (DSGVO-konform)
   // Google Maps verwendet jetzt die "Social"-Kategorie (als "Externe Dienste" bezeichnet)
-  React.useEffect(() => {
-    const checkConsent = () => {
-      try {
-        // react-cookie-manager speichert Consent in localStorage mit dem cookieKey
-        const consentCookie = localStorage.getItem('hausarztpraxis-dr-schirmer-consent-v1');
-        if (consentCookie) {
-          const consent = JSON.parse(consentCookie);
-          // Google Maps lädt nur, wenn "Social" (Externe Dienste) explizit akzeptiert wurde
-          setMapsConsent(consent && consent.Social === true);
-        } else {
-          setMapsConsent(false);
-        }
-      } catch (e) {
-        // Falls kein Consent gefunden oder Fehler beim Parsen, bleibt es false
-        setMapsConsent(false);
-      }
-    };
-    
-    checkConsent();
-    // Prüfe alle 500ms auf Cookie-Änderungen (wenn User Cookie-Banner bedient)
-    const interval = setInterval(checkConsent, 500);
-    
-    // Event Listener für Cookie-Änderungen
-    window.addEventListener('storage', checkConsent);
-    
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('storage', checkConsent);
-    };
-  }, []);
+  const mapsConsent = React.useMemo(() => {
+    if (!detailedConsent) return false;
+    // detailedConsent.Social ist ein ConsentStatus-Objekt mit { consented: boolean, timestamp: string }
+    return detailedConsent.Social?.consented === true;
+  }, [detailedConsent]);
 
   const handlePhoneCall = (practice: 'zschorlau' | 'aue') => {
     const phoneNumber = practice === 'zschorlau' ? '037715653950' : '0377120208';
@@ -878,13 +856,18 @@ const HomePage: React.FC = () => {
                       </p>
                       <button
                         onClick={() => {
-                          // Öffne Cookie-Einstellungen via Cookie-Manager Floating Button
-                          const cookieButton = document.querySelector('[data-cookie-manager]') as HTMLElement;
-                          if (cookieButton) {
-                            cookieButton.click();
+                          // Öffne Cookie-Einstellungen via Cookie-Manager Hook
+                          if (openPreferencesModal) {
+                            openPreferencesModal();
                           } else {
-                            // Fallback: Scroll tal zum Cookie Banner falls vorhanden
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            // Fallback: Suche nach dem Floating Cookie Button
+                            const cookieButton = document.querySelector('[data-cookie-manager], button[aria-label*="Cookie"], button[aria-label*="cookie"]') as HTMLElement;
+                            if (cookieButton) {
+                              cookieButton.click();
+                            } else {
+                              // Fallback: Scroll zum Cookie Banner falls vorhanden
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
                           }
                         }}
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"

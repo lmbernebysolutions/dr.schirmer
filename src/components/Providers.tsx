@@ -8,8 +8,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <I18nextProvider i18n={i18n}>
       <CookieManager
-        cookieKitId="dr-schirmer-v3"
-        cookieKey="dr-schirmer-consent-v3"
+        cookieKitId="hausarztpraxis-dr-schirmer-v1"
+        cookieKey="hausarztpraxis-dr-schirmer-consent-v1"
         enableFloatingButton={true}
         showManageButton={true}
         translations={i18n.t}
@@ -18,8 +18,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
         disableGeolocation={true}
         cookieCategories={{
           Analytics: true,
-          Social: true,
-          Advertising: true
+          Social: false,  // Nicht verwendet auf der Website
+          Advertising: false  // Nicht verwendet auf der Website
         }}
         initialPreferences={{
           Analytics: false,
@@ -27,13 +27,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
           Advertising: false
         }}
         onAccept={() => {
-          console.log("✅ Cookies akzeptiert");
+          console.log("✅ Cookies akzeptiert - Hausarztpraxis Dr. Schirmer");
         }}
         onDecline={() => {
-          console.log("❌ Cookies abgelehnt");
+          console.log("❌ Cookies abgelehnt - Hausarztpraxis Dr. Schirmer");
         }}
         onManage={(preferences) => {
-          console.log("⚙️ Cookie-Einstellungen:", preferences);
+          console.log("⚙️ Cookie-Einstellungen - Hausarztpraxis Dr. Schirmer:", preferences);
         }}
       >
         {children}

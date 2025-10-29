@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { 
   MapPin, 
   Phone, 
@@ -27,19 +27,67 @@ import {
 } from 'lucide-react';
 import ResponsiveImage from '@/components/ui/ResponsiveImage';
 import ResponsiveHeader from '@/components/layout/ResponsiveHeader';
-import DoctorsTeam from '@/components/sections/DoctorsTeam';
-import ChildConsultation from '@/components/sections/ChildConsultation';
-import LabServices from '@/components/sections/LabServices';
-import NewsSection from '@/components/sections/NewsSection';
-import AnimatedHero from '@/components/sections/AnimatedHero';
-import PracticeGallery from '@/components/sections/PracticeGallery';
 import SectionDivider from '@/components/ui/SectionDivider';
 import { SERVICES, IGeL_SERVICES } from '@/config/services';
 import { PRACTICES } from '@/config/company';
 
+// Lazy load alle Sektionen
+const DoctorsTeam = lazy(() => import('@/components/sections/DoctorsTeam'));
+const ChildConsultation = lazy(() => import('@/components/sections/ChildConsultation'));
+const LabServices = lazy(() => import('@/components/sections/LabServices'));
+const NewsSection = lazy(() => import('@/components/sections/NewsSection'));
+const AnimatedHero = lazy(() => import('@/components/sections/AnimatedHero'));
+const PracticeGallery = lazy(() => import('@/components/sections/PracticeGallery'));
+
+// Loading Component
+const SectionLoader = () => (
+  <div className="flex justify-center items-center py-16">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+);
+
 const HomePage: React.FC = () => {
   const [selectedMap, setSelectedMap] = React.useState<'zschorlau' | 'aue'>('zschorlau');
   const [showPhoneModal, setShowPhoneModal] = React.useState(false);
+  const [mapsConsent, setMapsConsent] = React.useState(false);
+  
+  // Prüfe Cookie-Consent für Google Maps (DSGVO-konform)
+  React.useEffect(() => {
+    const checkConsent = () => {
+      try {
+        // react-cookie-manager speichert Consent in localStorage mit dem cookieKey
+        const consentCookie = localStorage.getItem('hausarztpraxis-dr-schirmer-consent-v1');
+        if (consentCookie) {
+          const consent = JSON.parse(consentCookie);
+          // Google Maps lädt nur, wenn irgendein Consent gegeben wurde
+          // (Essential ist immer true, aber wir prüfen auf explizite Zustimmung)
+          const hasAnyConsent = consent && (
+            consent.Analytics === true || 
+            consent.Essential === true ||
+            Object.values(consent).some(v => v === true)
+          );
+          setMapsConsent(hasAnyConsent);
+        } else {
+          setMapsConsent(false);
+        }
+      } catch (e) {
+        // Falls kein Consent gefunden oder Fehler beim Parsen, bleibt es false
+        setMapsConsent(false);
+      }
+    };
+    
+    checkConsent();
+    // Prüfe alle 500ms auf Cookie-Änderungen (wenn User Cookie-Banner bedient)
+    const interval = setInterval(checkConsent, 500);
+    
+    // Event Listener für Cookie-Änderungen
+    window.addEventListener('storage', checkConsent);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('storage', checkConsent);
+    };
+  }, []);
 
   const handlePhoneCall = (practice: 'zschorlau' | 'aue') => {
     const phoneNumber = practice === 'zschorlau' ? '037715653950' : '0377120208';
@@ -804,19 +852,61 @@ const HomePage: React.FC = () => {
                 </div>
                 
                 <div className="mt-6">
-                  <iframe
-                    src={selectedMap === 'zschorlau' 
-                      ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2534.380256760598!2d12.6380256763231!3d50.56429417161414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a0c96ff2447a0b%3A0x1902c32d6d842b20!2sSchneeberger%20Str.%203%2C%2008321%20Zschorlau!5e0!3m2!1sen!2sde!4v1761333014395!5m2!1sen!2sde"
-                      : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2533.2180119553846!2d12.701939776324465!3d50.58590107161833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a0ca13bd023821%3A0x7ebb9bce54aecac7!2sSchwarzenberger%20Str.%207%2C%2008280%20Aue-Bad%20Schlema!5e0!3m2!1sen!2sde!4v1761333046361!5m2!1sen!2sde"
-                    }
-                    width="100%"
-                    height="250"
-                    style={{ border: 0, borderRadius: '1rem' }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title={`Praxis ${selectedMap === 'zschorlau' ? 'Zschorlau' : 'Aue'} - Google Maps`}
-                  ></iframe>
+                  {mapsConsent ? (
+                    <iframe
+                      src={selectedMap === 'zschorlau' 
+                        ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2534.380256760598!2d12.6380256763231!3d50.56429417161414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a0c96ff2447a0b%3A0x1902c32d6d842b20!2sSchneeberger%20Str.%203%2C%2008321%20Zschorlau!5e0!3m2!1sen!2sde!4v1761333014395!5m2!1sen!2sde"
+                        : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2533.2180119553846!2d12.701939776324465!3d50.58590107161833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a0ca13bd023821%3A0x7ebb9bce54aecac7!2sSchwarzenberger%20Str.%207%2C%2008280%20Aue-Bad%20Schlema!5e0!3m2!1sen!2sde!4v1761333046361!5m2!1sen!2sde"
+                      }
+                      width="100%"
+                      height="250"
+                      style={{ border: 0, borderRadius: '1rem' }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title={`Praxis ${selectedMap === 'zschorlau' ? 'Zschorlau' : 'Aue'} - Google Maps`}
+                    ></iframe>
+                  ) : (
+                    <div className="bg-gray-100 rounded-lg p-8 text-center border-2 border-gray-300">
+                      <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <h4 className="font-semibold text-gray-700 mb-2">Karte wird geladen</h4>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Um die Karte anzuzeigen, benötigen wir Ihre Zustimmung für externe Dienste wie Google Maps.
+                      </p>
+                      <p className="text-xs text-gray-500 mb-4">
+                        Google Maps überträgt Daten in die USA. Bitte akzeptieren Sie Cookies, um die Karte zu sehen.
+                      </p>
+                      <button
+                        onClick={() => {
+                          // Öffne Cookie-Einstellungen via Cookie-Manager Floating Button
+                          const cookieButton = document.querySelector('[data-cookie-manager]') as HTMLElement;
+                          if (cookieButton) {
+                            cookieButton.click();
+                          } else {
+                            // Fallback: Scroll tal zum Cookie Banner falls vorhanden
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }
+                        }}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                      >
+                        Cookie-Einstellungen öffnen
+                      </button>
+                      <p className="text-xs text-gray-500 mt-4">
+                        Oder nutzen Sie die{' '}
+                        <a
+                          href={selectedMap === 'zschorlau'
+                            ? 'https://www.google.com/maps/dir/?api=1&destination=Schneeberger+Straße+3,+08321+Zschorlau'
+                            : 'https://www.google.com/maps/dir/?api=1&destination=Schwarzenberger+Straße+7,+08280+Aue'
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          Routenplanung in Google Maps
+                        </a>
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

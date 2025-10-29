@@ -52,6 +52,7 @@ const HomePage: React.FC = () => {
   const [mapsConsent, setMapsConsent] = React.useState(false);
   
   // Prüfe Cookie-Consent für Google Maps (DSGVO-konform)
+  // Google Maps verwendet jetzt die "Social"-Kategorie (als "Externe Dienste" bezeichnet)
   React.useEffect(() => {
     const checkConsent = () => {
       try {
@@ -59,14 +60,8 @@ const HomePage: React.FC = () => {
         const consentCookie = localStorage.getItem('hausarztpraxis-dr-schirmer-consent-v1');
         if (consentCookie) {
           const consent = JSON.parse(consentCookie);
-          // Google Maps lädt nur, wenn irgendein Consent gegeben wurde
-          // (Essential ist immer true, aber wir prüfen auf explizite Zustimmung)
-          const hasAnyConsent = consent && (
-            consent.Analytics === true || 
-            consent.Essential === true ||
-            Object.values(consent).some(v => v === true)
-          );
-          setMapsConsent(hasAnyConsent);
+          // Google Maps lädt nur, wenn "Social" (Externe Dienste) explizit akzeptiert wurde
+          setMapsConsent(consent && consent.Social === true);
         } else {
           setMapsConsent(false);
         }
@@ -874,7 +869,7 @@ const HomePage: React.FC = () => {
                         Um die Karte anzuzeigen, benötigen wir Ihre Zustimmung für externe Dienste wie Google Maps.
                       </p>
                       <p className="text-xs text-gray-500 mb-4">
-                        Google Maps überträgt Daten in die USA. Bitte akzeptieren Sie Cookies, um die Karte zu sehen.
+                        Google Maps überträgt Daten in die USA. Bitte akzeptieren Sie "Externe Dienste" in den Cookie-Einstellungen, um die Karte zu sehen. Diese Einstellung ist optional - Sie können die Website auch ohne Google Maps nutzen.
                       </p>
                       <button
                         onClick={() => {

@@ -18,12 +18,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
         disableGeolocation={true}
         cookieCategories={{
           Analytics: true,
-          Social: false,  // Nicht verwendet auf der Website
+          Social: true,  // Wird als "Externe Dienste" für Google Maps verwendet
           Advertising: false  // Nicht verwendet auf der Website
         }}
         initialPreferences={{
           Analytics: false,
-          Social: false,
+          Social: false,  // Google Maps: Standardmäßig nicht aktiviert
           Advertising: false
         }}
         onAccept={() => {

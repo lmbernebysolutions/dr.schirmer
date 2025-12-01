@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Menu, X, Bell, ChevronDown, ChevronUp } from 'lucide-react';
 import { AlertSettings } from '@/types/notion';
-import { getAlertSettings } from '@/lib/notion-helpers';
 
 const ResponsiveHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,7 +14,7 @@ const ResponsiveHeader = () => {
   const [currentLogoIndex, setCurrentLogoIndex] = useState(0);
   const [alertSettings, setAlertSettings] = useState<AlertSettings>({
     isVisible: false,
-    text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
+    text: '',
     lastUpdated: new Date().toISOString()
   });
 
@@ -34,67 +33,34 @@ const ResponsiveHeader = () => {
     return () => clearInterval(interval);
   }, [logos.length]);
 
-  // Load alert settings from Notion API
-  useEffect(() => {
-    const loadAlertSettings = async () => {
-      try {
-        // Try to load from Notion API first
-        const settings = await getAlertSettings();
-        
-        if (settings) {
+  // Load alert settings from JSON (Fetch)
+  const fetchAlertSettings = async () => {
+    try {
+      const response = await fetch('/data/content.json?t=' + new Date().getTime());
+      if (response.ok) {
+        const data = await response.json();
+        if (data.alert) {
+          const settings = data.alert;
           setAlertSettings(settings);
           
           const shouldAutoExpand = checkIfShouldAutoExpand(settings.lastUpdated);
-          if (shouldAutoExpand) {
+          if (shouldAutoExpand && settings.isVisible) {
             setIsAlertExpanded(true);
           }
-        } else {
-          // Fallback to static JSON file
-          const alertData = await import('@/data/alert-settings.json');
-          const fallbackSettings = alertData.default || alertData;
-          
-          setAlertSettings({
-            isVisible: fallbackSettings.isVisible || true,
-            text: fallbackSettings.text || 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
-            lastUpdated: fallbackSettings.lastUpdated || new Date().toISOString()
-          });
-
-          const shouldAutoExpand = checkIfShouldAutoExpand(fallbackSettings.lastUpdated || new Date().toISOString());
-          if (shouldAutoExpand) {
-            setIsAlertExpanded(true);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading alert settings:', error);
-        // Fallback to static JSON file
-        try {
-          const alertData = await import('@/data/alert-settings.json');
-          const fallbackSettings = alertData.default || alertData;
-          
-          setAlertSettings({
-            isVisible: fallbackSettings.isVisible || true,
-            text: fallbackSettings.text || 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
-            lastUpdated: fallbackSettings.lastUpdated || new Date().toISOString()
-          });
-
-          const shouldAutoExpand = checkIfShouldAutoExpand(fallbackSettings.lastUpdated || new Date().toISOString());
-          if (shouldAutoExpand) {
-            setIsAlertExpanded(true);
-          }
-        } catch (fallbackError) {
-          console.error('Error loading fallback alert settings:', fallbackError);
-          const defaultSettings = {
-            isVisible: true,
-            text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
-            lastUpdated: new Date().toISOString()
-          };
-          setAlertSettings(defaultSettings);
-          setIsAlertExpanded(true);
         }
       }
-    };
+    } catch (error) {
+      console.error('Error loading alert settings:', error);
+    }
+  };
 
-    loadAlertSettings();
+  useEffect(() => {
+    fetchAlertSettings();
+
+    // Event Listener für Updates
+    const handleUpdate = () => fetchAlertSettings();
+    window.addEventListener('contentUpdated', handleUpdate);
+    return () => window.removeEventListener('contentUpdated', handleUpdate);
   }, []);
 
   // Professional auto-expansion logic following best practices
@@ -414,7 +380,7 @@ const ResponsiveHeader = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="bg-gradient-to-r from-yellow-50 to-amber-50 border-l-4 border-yellow-500 mx-6 mb-4 rounded-r-2xl shadow-lg overflow-hidden"
+              className="bg-gradient-to-r from-yellow-50 to-amber-50 border-l-4 border-yellow-500 mx-6 mb-2 md:mb-4 rounded-r-2xl shadow-lg overflow-hidden"
             >
               <div className="p-6">
                 <div className="flex items-start justify-between">

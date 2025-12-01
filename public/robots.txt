@@ -6,7 +6,7 @@ Disallow: /admin/
 Disallow: /private/
 
 # Sitemap
-Sitemap: https://ihrefirma.de/sitemap.xml
+Sitemap: https://hausarztpraxis-dr-schirmer.de/sitemap.xml
 
 # Crawl delay
 Crawl-delay: 1

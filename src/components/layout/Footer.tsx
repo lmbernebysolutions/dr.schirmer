@@ -44,14 +44,11 @@ const Footer = () => {
           {/* Spalte 1: Praxis-Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full flex items-center justify-center">
-                <Stethoscope className="w-6 h-6 text-white" />
-              </div>
-                  <h3 className="text-xl font-bold text-black mx-4">Hausarztpraxis Dr. Schirmer</h3>
-                </div>
+              <h3 className="text-xl font-bold text-black mx-4">Hausarztpraxis Dr. Schirmer</h3>
+            </div>
                 <p className="text-gray-600 leading-relaxed">
               Ihre vertrauensvolle Hausarztpraxis in Zschorlau und Aue. 
-              Mit modernster Ausstattung und persönlicher Betreuung für die ganze Familie.
+              Mit moderner Ausstattung und persönlicher Betreuung für die ganze Familie.
             </p>
             <p className="text-sm text-gray-500">
               Mit Sorgfalt für Sie gestaltet.

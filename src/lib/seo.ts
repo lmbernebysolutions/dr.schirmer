@@ -176,50 +176,6 @@ export function generateMetadata(page: keyof typeof seoConfig.pages): Metadata {
 
 // Structured data for medical business
 export const structuredData = {
-  medicalBusiness: {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalBusiness',
-    name: 'Dr. med. Lars Schirmer',
-    description: 'Facharzt für Allgemeinmedizin in Aue und Zschorlau',
-    url: 'https://dr-schirmer.de',
-    telephone: '+4937715653950',
-    email: 'info@dr-schirmer.de',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Hauptstraße 123',
-      addressLocality: 'Aue',
-      postalCode: '08309',
-      addressRegion: 'Sachsen',
-      addressCountry: 'DE',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 50.5903,
-      longitude: 12.7000,
-    },
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '08:00',
-        closes: '18:00',
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Saturday',
-        opens: '09:00',
-        closes: '12:00',
-      },
-    ],
-    medicalSpecialty: 'Allgemeinmedizin',
-    priceRange: '€€',
-    currenciesAccepted: 'EUR',
-    paymentAccepted: 'Cash, Credit Card, Insurance',
-    hasMap: 'https://maps.google.com/?q=Hauptstraße+123,+08309+Aue',
-    sameAs: [
-      'https://www.google.com/maps/place/Dr.+med.+Lars+Schirmer',
-    ],
-  },
   
   organization: {
       '@context': 'https://schema.org',

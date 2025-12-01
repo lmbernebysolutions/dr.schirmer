@@ -22,7 +22,7 @@ const Header = () => {
   const [isAlertExpanded, setIsAlertExpanded] = useState(false);
   const [alertSettings, setAlertSettings] = useState<AlertSettings>({
     isVisible: false, // Start with false, will be set by useEffect
-    text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
+    text: 'Aktuell: Bitte beachten Sie die Hinweise zur Praxis-Schließung über den Jahreswechsel',
     lastUpdated: new Date().toISOString()
   });
   const pathname = usePathname();

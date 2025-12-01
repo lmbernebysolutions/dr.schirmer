@@ -26,7 +26,7 @@ export const DOCTORS: Doctor[] = [
     id: 'unger',
     name: 'Dr. med. Lars Unger',
     title: 'Facharzt für Allgemeinmedizin',
-    description: 'Spezialistin für Familienmedizin und Prävention',
+    description: 'Facharzt für Allgemeinmedizin mit Schwerpunkt Familienmedizin und Prävention',
     location: 'aue',
     category: 'facharzt',
     specialties: ['Familienmedizin', 'Prävention', 'Chronische Erkrankungen']
@@ -35,7 +35,7 @@ export const DOCTORS: Doctor[] = [
   // Weiterbildungsärzte
   {
     id: 'rau',
-    name: 'Isabell Rau',
+    name: 'Isabelle Rau',
     title: 'Weiterbildungsärztin',
     description: 'Engagierte Ärztin in der Weiterbildung mit Schwerpunkt auf Patientenbetreuung',
     location: 'both',
@@ -55,10 +55,10 @@ export const DOCTORS: Doctor[] = [
     id: 'gehring',
     name: 'Dr. med. Richard Gehring',
     title: 'Weiterbildungsarzt',
-    description: 'Erfahrener Weiterbildungsarzt mit Fokus auf moderne Diagnostik und Behandlung',
+    description: 'Erfahrener Weiterbildungsarzt mit Fokus auf umfassende Diagnostik und Behandlung',
     location: 'both',
     category: 'weiterbildungsarzt',
-    specialties: ['Diagnostik', 'Moderne Behandlungsmethoden']
+    specialties: ['Diagnostik', 'Behandlungsmethoden']
   }
 ];
 
@@ -68,4 +68,30 @@ export const getDoctorsByCategory = (category: 'facharzt' | 'weiterbildungsarzt'
 
 export const getDoctorsByLocation = (location: 'zschorlau' | 'aue'): Doctor[] => {
   return DOCTORS.filter(doctor => doctor.location === location || doctor.location === 'both');
+};
+
+// Schwestern und MFA Team
+export interface Nurse {
+  id: string;
+  name: string;
+  title: string;
+  location: 'zschorlau' | 'aue' | 'both';
+}
+
+export const NURSES: Nurse[] = [
+  // Hier können die Schwesternnamen eingetragen werden
+  // Beispiel:
+  // {
+  //   id: 'nurse1',
+  //   name: 'Vorname Nachname',
+  //   title: 'Krankenschwester',
+  //   location: 'zschorlau'
+  // },
+];
+
+export const getNurseNames = (): string => {
+  if (NURSES.length === 0) {
+    return ''; // Leer lassen, wenn keine Namen vorhanden
+  }
+  return NURSES.map(nurse => nurse.name).join(', ');
 };

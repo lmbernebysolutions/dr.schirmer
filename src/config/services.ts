@@ -14,7 +14,7 @@ export const SERVICES: Service[] = [
   {
     id: 'diagnostik',
     title: 'Moderne Diagnostik',
-    description: 'Mit Sonographie, EKG, Ergometrie und Lungenfunktionstests blicken wir genau hin, um Ihnen die beste Behandlung zu ermöglichen.',
+    description: 'Mit Sonographie, EKG, Ergometrie und Lungenfunktionstests führen wir umfassende Diagnostik durch, um eine fundierte Behandlungsgrundlage zu schaffen.',
     icon: 'stethoscope',
     category: 'diagnostik',
     availableAt: ['zschorlau', 'aue']
@@ -24,7 +24,7 @@ export const SERVICES: Service[] = [
   {
     id: 'vorsorge',
     title: 'Ganzheitliche Vorsorge',
-    description: 'Von Check-ups über Hautkrebsscreenings bis zu U-Untersuchungen – wir begleiten Sie auf dem Weg zu einem langen, gesunden Leben.',
+    description: 'Von Vorsorgeuntersuchungen über Hautkrebsscreenings bis zu U-Untersuchungen – wir begleiten Sie in allen Lebensphasen bei Ihrer Gesundheitsvorsorge.',
     icon: 'shield',
     category: 'vorsorge',
     availableAt: ['zschorlau', 'aue']
@@ -34,7 +34,7 @@ export const SERVICES: Service[] = [
   {
     id: 'igel',
     title: 'Individuelle Gesundheitsleistungen (IGeL)',
-    description: 'Erweiterte Gesundheitsleistungen für Ihre optimale Versorgung: Check-ups, Krebsvorsorge, Sportmedizin und mehr.',
+    description: 'Erweiterte Gesundheitsleistungen für eine umfassende Versorgung: Vorsorgeuntersuchungen, Krebsvorsorge, Sportmedizin und mehr.',
     icon: 'heart',
     category: 'igel',
     availableAt: ['zschorlau', 'aue']
@@ -52,12 +52,13 @@ export const SERVICES: Service[] = [
 ];
 
 export const IGeL_SERVICES = [
-  'Erweiterter Check-up 35+',
-  'Erweiterte Krebsvorsorge',
+  'Erweiterte Vorsorgeuntersuchung ab 35 Jahren',
+  'Triggerpunktakupunktur',
+  'Manuelle Therapie',
+  'Kinesiotaping',
+  'Erweiterte Labordiagnostik',
   'Sportmedizinische Untersuchung',
-  'Atteste und Gutachten',
-  'Vitaminbestimmung',
-  'Erweiterte Laboruntersuchungen'
+  'Atteste und Gutachten'
 ];
 
 export const LAB_SERVICES = [

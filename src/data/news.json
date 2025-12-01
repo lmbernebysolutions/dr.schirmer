@@ -3,8 +3,8 @@
     {
       "id": "1",
       "title": "Praxis-Urlaub",
-      "description": "Vom 15. bis 30. Dezember bleibt unsere Praxis geschlossen. In dringenden Fällen wenden Sie sich an den ärztlichen Bereitschaftsdienst.",
-      "date": "2024-12-01",
+      "description": "Wegen der Modernisierung unserer Praxisoftware bleiben unsere Hausarztpraxen vom 23.12.2025 bis 07.01.2026 geschlossen. Bitte bedenken Sie das bei der Rezeptbestellung. Am 29.12 findet in der Zeit von 8-12:00 Uhr eine Akutsprechstunde in Aue statt. Herr Christoph Borgers vertritt unsere Praxis vom 05-07.01.2026.",
+      "date": "2025-11-19",
       "icon": "calendar",
       "color": "yellow",
       "published": true
@@ -12,8 +12,8 @@
     {
       "id": "2",
       "title": "Grippe-Impfung",
-      "description": "Die Grippe-Impfung ist jetzt verfügbar. Vereinbaren Sie Ihren Termin für eine rechtzeitige Impfung vor der Grippesaison.",
-      "date": "2024-11-15",
+      "description": "Die Grippe-Impfung ist jetzt verfügbar. Ein Termin für die Impfung ist nicht nötig.",
+      "date": "2025-11-19",
       "icon": "heart",
       "color": "red",
       "published": true
@@ -21,8 +21,8 @@
     {
       "id": "3",
       "title": "Neue Praxissoftware",
-      "description": "Wir haben unsere Praxissoftware modernisiert. Online-Terminbuchung und E-Rezepte sind jetzt verfügbar.",
-      "date": "2024-11-01",
+      "description": "Wir haben unsere Praxissoftware modernisiert. E-Rezepte sind verfügbar und Online-Terminbuchungen sind zukünftig verfügbar.",
+      "date": "2025-11-19",
       "icon": "shield",
       "color": "yellow",
       "published": true

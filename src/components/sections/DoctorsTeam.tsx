@@ -3,7 +3,6 @@
 import React from 'react';
 import { MapPin, Stethoscope, GraduationCap } from 'lucide-react';
 import { DOCTORS, getDoctorsByCategory } from '@/config/team';
-import ResponsiveImage from '../ui/ResponsiveImage';
 
 const DoctorsTeam: React.FC = () => {
   const fachaerzte = getDoctorsByCategory('facharzt');
@@ -59,8 +58,8 @@ const DoctorsTeam: React.FC = () => {
     const colors = colorClasses[color as keyof typeof colorClasses];
 
     return (
-      <div className="bg-white rounded-3xl card-spacing-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center">
-        <div className="w-32 h-32 rounded-full mx-auto element-spacing overflow-hidden">
+      <div className="bg-white rounded-2xl p-4 shadow-md hover:shadow-lg transition-all duration-300 text-center w-48">
+        <div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden">
           {doctor.image ? (
             <img 
               src={doctor.image} 
@@ -68,94 +67,98 @@ const DoctorsTeam: React.FC = () => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className={`w-full h-full flex items-center justify-center text-white text-2xl font-bold ${colors.bg}`}>
+            <div className={`w-full h-full flex items-center justify-center text-white text-lg font-bold ${colors.bg}`}>
               {doctor.name.split(' ').map((n: string) => n.charAt(0)).join('')}
             </div>
           )}
         </div>
         
-        <div className="element-spacing-sm">
+        <div className="mb-2">
           {getLocationBadge(doctor.location)}
         </div>
         
-        <h3 className={`text-2xl font-bold text-spacing-sm ${colors.text}`}>
+        <h3 className={`text-base font-bold mb-1 ${colors.text}`}>
           {doctor.name}
         </h3>
         
-        <p className="text-gray-600 font-medium text-spacing">
+        <p className="text-gray-600 text-xs font-medium mb-2">
           {doctor.title}
         </p>
-        
-        <p className="text-gray-600 text-sm leading-relaxed text-spacing">
-          {doctor.description}
-        </p>
-
-        {doctor.specialties && (
-          <div className="flex flex-wrap justify-center grid-spacing-sm">
-            {doctor.specialties.map((specialty: string, index: number) => (
-              <span key={index} className={`px-2 py-1 rounded-full text-xs font-medium ${colors.light} ${colors.text}`}>
-                {specialty}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
     );
   };
 
+
   return (
     <section id="team" className="section-padding bg-section-primary">
       <div className="container mx-auto px-6">
+        {/* Hauptüberschrift */}
         <div className="text-center element-spacing-xl">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 element-spacing">
-            Unsere MFA und Schwestern
+            Unser Team
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Unser engagiertes Team besteht aus erfahrenen MFA und Schwestern, die von unseren Fachärzten Dr. med. Lars Schirmer und Dr. med. Lars Unger sowie unseren Weiterbildungsärztinnen Isabell Rau und Dr. J. Schuster-Meinel unterstützt werden.
+          <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed mt-4">
+            Unser engagiertes Team besteht aus erfahrenen Fachärzten Dr. med. Lars Schirmer und Dr. med. Lars Unger sowie unseren Weiterbildungsärztinnen Fr. Isabelle Rau und Frau Dr. med. Julia Schuster Meinel. Unterstützt werden wir von unserem Team aus erfahrenen Krankenschwestern und Medizinischen Fachangestellten, die für eine professionelle und herzliche Betreuung während Ihres Praxisbesuchs sorgen.
           </p>
         </div>
 
-        {/* Unsere MFA und Schwestern */}
-        <div className="element-spacing-xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 grid-spacing-xl max-w-6xl mx-auto">
-            <div className="text-center group">
-              <div className="relative element-spacing">
-                <ResponsiveImage 
-                  src="/images/Schwesternteam 2025.jpg" 
-                  alt="Schwesternteam 2025" 
-                  className="w-64 md:w-80 h-64 md:h-80 mx-auto rounded-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-lg"
-                  sizes="(max-width: 768px) 256px, 320px"
-                />
-                <div className="absolute -bottom-2 -right-2 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl bg-yellow-600 shadow-lg">
-                  <Stethoscope className="w-10 h-10" />
-                </div>
+        {/* Zwei Spalten: Schwestern (links) und Ärzte (rechts) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto element-spacing-xl">
+          {/* Linke Spalte: Unsere Schwestern */}
+          <div className="text-center group">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+              Unsere Schwestern
+            </h3>
+            <div className="relative element-spacing">
+              <img 
+                src="/images/Schwesternteam 2025.jpg" 
+                alt="Schwesternteam 2025" 
+                className="w-64 md:w-80 h-64 md:h-80 mx-auto rounded-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-lg"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute -bottom-2 -right-2 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl bg-yellow-600 shadow-lg">
+                <Stethoscope className="w-10 h-10" />
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 text-spacing-sm">Schwesternteam</h3>
-              <p className="text-xl text-gray-600 text-spacing font-semibold">MFA bei der Patientenbetreuung</p>
-              <p className="text-gray-500 leading-relaxed text-lg">
-                Unser erfahrenes Schwesternteam sorgt für eine professionelle und herzliche Betreuung während Ihres Praxisbesuchs.
-              </p>
             </div>
-            
-            <div className="text-center group">
-              <div className="relative element-spacing">
-                <ResponsiveImage 
-                  src="/images/picture01.jpg" 
-                  alt="Medizinische Fachangestellte" 
-                  className="w-64 md:w-80 h-64 md:h-80 mx-auto rounded-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-lg"
-                  sizes="(max-width: 768px) 256px, 320px"
-                />
-                <div className="absolute -bottom-2 -right-2 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl bg-[#FF0000] shadow-lg">
-                  <GraduationCap className="w-10 h-10" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-gray-900 text-spacing-sm">Medizinische Fachangestellte</h3>
-              <p className="text-xl text-gray-600 text-spacing font-semibold">Schwester im Behandlungsraum</p>
-              <p className="text-gray-500 leading-relaxed text-lg">
-                Unsere MFA-Teams in beiden Praxen organisieren Termine, führen Voruntersuchungen durch und stehen Ihnen mit Rat und Tat zur Seite.
-              </p>
-            </div>
+            {/* Schwesternnamen in klein */}
+            <p className="text-xs text-gray-400 mt-4">
+              Mandy, Lilly, Sylvia, Conny, Monique
+            </p>
           </div>
+
+          {/* Rechte Spalte: Unsere Ärzte */}
+          <div className="text-center group">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+              Unsere Ärzte
+            </h3>
+            <div className="relative element-spacing">
+              <img 
+                src="/images/picture01.jpg" 
+                alt="Medizinische Fachangestellte" 
+                className="w-64 md:w-80 h-64 md:h-80 mx-auto rounded-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-lg"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute -bottom-2 -right-2 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl bg-[#FF0000] shadow-lg">
+                <GraduationCap className="w-10 h-10" />
+              </div>
+            </div>
+            {/* Ärztenamen entfernt */}
+          </div>
+        </div>
+
+        {/* Ärzte Cards */}
+        <div className="element-spacing-xl">
+          <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
+            {fachaerzte.map((doctor) => (
+              <DoctorCard key={doctor.id} doctor={doctor} isFacharzt={true} />
+            ))}
+            {weiterbildungsaerzte.map((doctor) => (
+              <DoctorCard key={doctor.id} doctor={doctor} isFacharzt={false} />
+            ))}
+          </div>
+          
         </div>
 
       </div>

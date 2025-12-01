@@ -5,6 +5,7 @@ import ResponsiveHeader from '@/components/layout/ResponsiveHeader';
 import Footer from '@/components/layout/Footer';
 import { Providers } from '@/components/Providers';
 import PasswordProtection from '@/components/PasswordProtection';
+import { PRACTICES } from '@/config/company';
 
 // Font configuration - Organic & Human-Centric
 const quicksand = Quicksand({
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
     default: 'Hausarztpraxis Dr. Schirmer | Zschorlau & Aue',
     template: '%s | Hausarztpraxis Dr. Schirmer',
   },
-  description: 'Ihre vertrauensvolle Hausarztpraxis in Zschorlau und Aue. Mit modernster Ausstattung und persönlicher Betreuung für die ganze Familie.',
+  description: 'Ihre vertrauensvolle Hausarztpraxis in Zschorlau und Aue. Mit moderner Ausstattung und persönlicher Betreuung für die ganze Familie.',
   keywords: 'Hausarzt, Allgemeinmedizin, Aue, Zschorlau, Erzgebirge, Praxis, Vorsorge, Notfall, Dr. Schirmer, Dr. Unger, Dr. Schuster-Meinel, Lehrpraxis',
   authors: [{ name: 'Dr. Schirmer' }],
   creator: 'Dr. Schirmer',
@@ -38,21 +39,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'de_DE',
     url: 'https://dr-schirmer.de',
-    title: 'Praxis Dr. Schirmer | Organic & Human-Centric',
+    title: 'Hausarztpraxis Dr. Schirmer | Zschorlau & Aue',
     description: 'Ihre Gesundheit in einer warmen und fürsorglichen Atmosphäre. Willkommen in den Praxen Dr. Schirmer in Zschorlau und Aue.',
-    siteName: 'Praxis Dr. Schirmer',
+    siteName: 'Hausarztpraxis Dr. Schirmer',
     images: [
       {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Praxis Dr. Schirmer - Organic & Human-Centric',
+        alt: 'Hausarztpraxis Dr. Schirmer - Zschorlau & Aue',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Praxis Dr. Schirmer | Organic & Human-Centric',
+    title: 'Hausarztpraxis Dr. Schirmer | Zschorlau & Aue',
     description: 'Ihre Gesundheit in einer warmen und fürsorglichen Atmosphäre. Willkommen in den Praxen Dr. Schirmer in Zschorlau und Aue.',
     images: ['/images/og-image.jpg'],
   },
@@ -98,7 +99,7 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#1e40af" />
         
         {/* Viewport */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         
         {/* Additional Meta Tags */}
         <meta name="format-detection" content="telephone=no" />
@@ -117,10 +118,9 @@ export default function RootLayout({
               name: 'Hausarztpraxis Dr. Schirmer',
               description: 'Vertrauensvolle Hausarztpraxis für die ganze Familie in Zschorlau und Aue',
               url: 'https://hausarztpraxis-dr-schirmer.de',
-              telephone: '037715653950',
+              telephone: ['037715653950', '0377120208'],
               email: 'hausarztpraxis-dr-schirmer@web.de',
-              address: [
-                {
+              address: {
                   '@type': 'PostalAddress',
                   streetAddress: 'Schneeberger Straße 3',
                   addressLocality: 'Zschorlau',
@@ -128,21 +128,48 @@ export default function RootLayout({
                   addressRegion: 'Sachsen',
                   addressCountry: 'DE'
                 },
-                {
+              department: PRACTICES.map(practice => {
+                // Konvertiere Öffnungszeiten in Schema.org Format
+                const openingHours: string[] = [];
+                const dayMap: Record<string, string> = {
+                  monday: 'Mo',
+                  tuesday: 'Di',
+                  wednesday: 'Mi',
+                  thursday: 'Do',
+                  friday: 'Fr',
+                  saturday: 'Sa',
+                  sunday: 'So'
+                };
+                
+                Object.entries(practice.openingHours).forEach(([day, hours]) => {
+                  if (hours !== 'Geschlossen' && hours) {
+                    const dayAbbr = dayMap[day];
+                    // Format: "07:30 - 12:00 & 14:00 - 16:00" -> "Mo 07:30-12:00,14:00-16:00"
+                    const formatted = hours
+                      .replace(/\s+/g, '') // Entferne alle Leerzeichen
+                      .replace(/&/g, ','); // Ersetze & durch Komma
+                    openingHours.push(`${dayAbbr} ${formatted}`);
+                  }
+                });
+
+                const [street, ...rest] = practice.address.split(',');
+                const [postalCode, city] = rest[0]?.trim().split(' ') || ['', ''];
+
+                return {
+                  '@type': 'MedicalClinic',
+                  name: practice.name,
+                  telephone: practice.phone.replace(/\s+/g, '').replace(/\//g, ''),
+                  address: {
                   '@type': 'PostalAddress',
-                  streetAddress: 'Schwarzenberger Straße 7',
-                  addressLocality: 'Aue',
-                  postalCode: '08280',
+                    streetAddress: street,
+                    addressLocality: city,
+                    postalCode: postalCode,
                   addressRegion: 'Sachsen',
                   addressCountry: 'DE'
-                }
-              ],
-              openingHours: [
-                'Mo 07:30-12:00,14:00-16:00',
-                'Do 07:30-12:00,14:00-18:00',
-                'Mo 07:30-12:00,14:00-17:00',
-                'Di 07:30-12:00,14:00-17:00'
-              ],
+                  },
+                  openingHours: openingHours.length > 0 ? openingHours : undefined
+                };
+              }),
               medicalSpecialty: 'Allgemeinmedizin',
               priceRange: '$$',
               paymentAccepted: 'Cash, Credit Card, Insurance',

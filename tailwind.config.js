@@ -100,8 +100,8 @@ const config = {
       
       // Typografie
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-quicksand)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-quicksand)', 'system-ui', 'sans-serif'],
       },
       
       // Spacing für konsistente Abstände

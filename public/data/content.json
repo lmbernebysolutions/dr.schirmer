@@ -1,0 +1,37 @@
+{
+  "alert": {
+    "isVisible": true,
+    "text": "Aktuell: Bitte beachten Sie die Hinweise zur Praxis-Schließung über den Jahreswechsel",
+    "lastUpdated": "2024-11-24T12:00:00.000Z"
+  },
+  "news": [
+    {
+      "id": "1",
+      "title": "Praxisurlaub",
+      "description": "Vom 23.12.2024 bis 03.01.2025 bleibt unsere Praxis geschlossen. Vertretung übernimmt in dringenden Fällen der kassenärztliche Bereitschaftsdienst unter der Rufnummer 116 117. Wir wünschen Ihnen ein frohes Weihnachtsfest und einen gesunden Start ins neue Jahr!",
+      "date": "2024-12-01",
+      "icon": "calendar",
+      "color": "yellow",
+      "published": true
+    },
+    {
+      "id": "2",
+      "title": "Grippeschutzimpfung",
+      "description": "Die aktuelle Grippeschutzimpfung ist ab sofort verfügbar. Bitte vereinbaren Sie einen Termin oder kommen Sie zu unseren Sprechzeiten vorbei. Schützen Sie sich und andere!",
+      "date": "2024-10-15",
+      "icon": "shield",
+      "color": "red",
+      "published": true
+    },
+    {
+      "id": "3",
+      "title": "E-Rezept",
+      "description": "Ab sofort stellen wir Rezepte als E-Rezept aus. Bitte bringen Sie dazu Ihre Versichertenkarte mit. Sie können das Rezept dann in jeder Apotheke mit Ihrer Karte einlösen.",
+      "date": "2024-01-01",
+      "icon": "heart",
+      "color": "yellow",
+      "published": true
+    }
+  ]
+}
+

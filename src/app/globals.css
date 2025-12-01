@@ -184,10 +184,38 @@
     font-size: clamp(1.125rem, 2.5vw + 0.125rem, 1.5rem);
   }
 
-  /* Focus Styles für Accessibility */
-  *:focus {
-    outline: 2px solid var(--color-primary-500);
-    outline-offset: 2px;
+  /* Focus Styles für Accessibility - WCAG 2.4.7 */
+  /* Sichtbarer Fokus für alle interaktiven Elemente */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--color-primary-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Fallback für Browser ohne :focus-visible Support */
+  a:focus,
+  button:focus,
+  input:focus,
+  textarea:focus,
+  select:focus,
+  [tabindex]:focus {
+    outline: 3px solid var(--color-primary-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Entferne Fokus nur für Maus-Klicks, nicht für Tastatur */
+  a:focus:not(:focus-visible),
+  button:focus:not(:focus-visible),
+  input:focus:not(:focus-visible),
+  textarea:focus:not(:focus-visible),
+  select:focus:not(:focus-visible) {
+    outline: none;
   }
 
   /* Reduced Motion */
@@ -267,7 +295,13 @@
     padding-bottom: 0;
   }
 
-  .accordion-item.open .accordion-content {
+  .accordion-content[hidden] {
+    display: block;
+    max-height: 0;
+  }
+
+  .accordion-item.open .accordion-content,
+  .accordion-content:not([hidden]) {
     max-height: 500px;
     padding-top: 0.5rem;
     padding-bottom: 1.5rem;
@@ -820,7 +854,13 @@
   padding-bottom: 0;
 }
 
-.accordion-item.open .accordion-content {
+.accordion-content[hidden] {
+  display: block;
+  max-height: 0;
+}
+
+.accordion-item.open .accordion-content,
+.accordion-content:not([hidden]) {
   max-height: 500px;
   padding-top: 0.5rem;
   padding-bottom: 1.5rem;

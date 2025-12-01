@@ -120,8 +120,8 @@ The following placeholder images are currently used and need replacement:
 '/images/wz-1.jpg' - Waiting area
 
 // Logos
-'/images/logo01.jpg' - Zschorlau logo
-'/images/logo02.jpg' - Aue logo
+'/images/logo01.png' - Zschorlau logo
+'/images/logo02.png' - Aue logo
 '/images/stab.jpg' - Main logo
 ```
 

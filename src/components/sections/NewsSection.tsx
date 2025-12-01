@@ -1,91 +1,38 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, Heart, Shield } from 'lucide-react';
 import { NewsPost } from '@/types/notion';
-import { getNewsPosts } from '@/lib/notion-helpers';
 
 const NewsSection: React.FC = () => {
   const [posts, setPosts] = useState<NewsPost[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  // Listen for news updates
-  useEffect(() => {
-    const handleNewsUpdate = () => {
-      fetchPosts();
-    };
-
-    window.addEventListener('newsUpdated', handleNewsUpdate);
-    return () => window.removeEventListener('newsUpdated', handleNewsUpdate);
-  }, []);
-
-  const fetchPosts = async () => {
+  const fetchNews = async () => {
     try {
-      // Try to load from Notion API first
-      const notionPosts = await getNewsPosts();
-      
-      if (notionPosts && notionPosts.length > 0) {
-        // Filter only published posts for display
-        const publishedPosts = notionPosts.filter((post: NewsPost) => post.published);
-        setPosts(publishedPosts);
-      } else {
-        // Fallback to static JSON file
-        const newsData = await import('@/data/news-posts.json');
-        const data = newsData.default || newsData;
-        
-        // Handle both array format and object with posts property
-        let posts: NewsPost[] = [];
-        if (Array.isArray(data)) {
-          posts = data as NewsPost[];
-        } else if (data && typeof data === 'object' && 'posts' in data) {
-          posts = (data as { posts: NewsPost[] }).posts;
+      const response = await fetch('/data/content.json?t=' + new Date().getTime());
+      if (response.ok) {
+        const data = await response.json();
+        if (data.news) {
+          const publishedPosts = data.news.filter((p: NewsPost) => p.published);
+          setPosts(publishedPosts);
         }
-        
-        // Filter only published posts for display
-        const publishedPosts = posts.filter((post: NewsPost) => post.published);
-        setPosts(publishedPosts);
       }
     } catch (error) {
-      console.error('Error loading posts:', error);
-      // Fallback to static JSON file
-      try {
-        const newsData = await import('@/data/news-posts.json');
-        const data = newsData.default || newsData;
-        
-        // Handle both array format and object with posts property
-        let posts: NewsPost[] = [];
-        if (Array.isArray(data)) {
-          posts = data as NewsPost[];
-        } else if (data && typeof data === 'object' && 'posts' in data) {
-          posts = (data as { posts: NewsPost[] }).posts;
-        }
-        
-        // Filter only published posts for display
-        const publishedPosts = posts.filter((post: NewsPost) => post.published);
-        setPosts(publishedPosts);
-      } catch (fallbackError) {
-        console.error('Error loading fallback posts:', fallbackError);
-        const fallbackPosts: NewsPost[] = [
-          {
-            id: "1",
-            title: "Praxis-Urlaub",
-            description: "Vom 15. bis 30. Dezember bleibt unsere Praxis geschlossen. In dringenden Fällen wenden Sie sich an den ärztlichen Bereitschaftsdienst.",
-            date: "2024-12-01",
-            icon: "calendar",
-            color: "yellow",
-            published: true
-          }
-        ];
-        setPosts(fallbackPosts);
-      }
+      console.error('Error fetching news:', error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchNews();
+
+    // Event Listener für Updates vom Admin Panel
+    const handleUpdate = () => fetchNews();
+    window.addEventListener('contentUpdated', handleUpdate);
+    return () => window.removeEventListener('contentUpdated', handleUpdate);
+  }, []);
 
   const getIcon = (iconName: string) => {
     const iconMap: { [key: string]: React.ComponentType<any> } = {
@@ -118,11 +65,8 @@ const NewsSection: React.FC = () => {
   if (loading) {
     return (
       <section className="section-padding bg-section-primary">
-        <div className="container mx-auto px-6">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto element-spacing-sm"></div>
-            <p className="text-gray-600">Lade aktuelle Meldungen...</p>
-          </div>
+        <div className="container mx-auto px-6 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto"></div>
         </div>
       </section>
     );
@@ -168,8 +112,12 @@ const NewsSection: React.FC = () => {
             })}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500">Derzeit keine aktuellen Meldungen verfügbar.</p>
+          <div className="text-center py-12 bg-white rounded-3xl shadow-sm max-w-2xl mx-auto">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Calendar className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-900">Keine Meldungen</h3>
+            <p className="text-gray-500 mt-2">Derzeit liegen keine aktuellen Meldungen vor.</p>
           </div>
         )}
       </div>

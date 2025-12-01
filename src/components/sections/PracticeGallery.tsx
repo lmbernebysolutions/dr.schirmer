@@ -65,7 +65,7 @@ const PracticeGallery: React.FC = () => {
       src: '/images/picture03.jpg',
       alt: 'Behandlungsräume Aue',
       title: 'Behandlungsräume Aue',
-      description: 'Professionelle Ausstattung für optimale Behandlung',
+      description: 'Professionelle Ausstattung für eine fundierte Behandlung',
       location: 'aue'
     },
     {

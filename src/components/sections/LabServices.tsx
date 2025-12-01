@@ -46,7 +46,7 @@ const LabServices: React.FC = () => {
             <span className="sm:hidden">Labor</span>
           </h2>
           <p className="text-sm md:text-lg text-gray-600 max-w-3xl mx-auto">
-            <span className="hidden sm:inline">Umfassende Labordiagnostik für präzise Diagnosen und optimale Behandlung</span>
+            <span className="hidden sm:inline">Umfassende Labordiagnostik für präzise Diagnosen und fundierte Behandlungsentscheidungen</span>
             <span className="sm:hidden">Labordiagnostik für präzise Diagnosen</span>
           </p>
         </div>
@@ -84,7 +84,7 @@ const LabServices: React.FC = () => {
                 <span className="sm:hidden">Schnelle Ergebnisse</span>
               </h3>
               <p className="text-gray-600 leading-relaxed element-spacing max-w-3xl mx-auto text-sm md:text-base">
-                <span className="hidden sm:inline">Unsere Praxis verfügt über ein eigenes Labor, das es uns ermöglicht, zahlreiche Untersuchungen direkt vor Ort durchzuführen. Dies gewährleistet schnelle und zuverlässige Ergebnisse, die eine optimale Behandlung unterstützen.</span>
+                <span className="hidden sm:inline">Unsere Praxis verfügt über ein eigenes Labor, das es uns ermöglicht, zahlreiche Untersuchungen direkt vor Ort durchzuführen. Dies gewährleistet schnelle und zuverlässige Ergebnisse, die eine fundierte Behandlung unterstützen.</span>
                 <span className="sm:hidden">Eigenes Labor für schnelle und zuverlässige Ergebnisse vor Ort.</span>
               </p>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-600 max-w-2xl mx-auto">

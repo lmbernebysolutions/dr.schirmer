@@ -35,10 +35,10 @@ export const PRACTICES: PracticeInfo[] = [
     color: 'yellow',
     openingHours: {
       monday: '07:30 - 12:00 & 14:00 - 16:00',
-      tuesday: 'Geschlossen',
-      wednesday: 'Geschlossen',
+      tuesday: '07:30 - 11:30',
+      wednesday: '07:30 - 12:00',
       thursday: '07:30 - 12:00 & 14:00 - 18:00',
-      friday: 'Geschlossen',
+      friday: '07:30 - 11:30',
       saturday: 'Geschlossen',
       sunday: 'Geschlossen'
     },

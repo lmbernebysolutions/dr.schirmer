@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export', // Removed for Vercel deployment
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    unoptimized: true, // Kann auf false gesetzt werden für Vercel Image Optimization, aber true ist sicherer für Konsistenz
     domains: ['localhost'],
   },
   // Exclude cookie-manager-temp from build

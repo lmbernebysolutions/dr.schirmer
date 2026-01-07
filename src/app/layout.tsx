@@ -1,3 +1,4 @@
+import Script from 'next/script';
 import type { Metadata } from 'next';
 import { Quicksand } from 'next/font/google';
 import './globals.css';
@@ -172,6 +173,15 @@ export default function RootLayout({
         />
       </head>
       <body className={`${quicksand.className} antialiased`}>
+        {/* Medatixx Scripts für Online-Terminbuchung */}
+        <Script 
+          src="https://webtermin.medatixx.de/plugin/jquery-3.6.0.min.js" 
+          strategy="afterInteractive"
+        />
+        <Script 
+          src="https://webtermin.medatixx.de/plugin/terminbuchung-plugin.js" 
+          strategy="afterInteractive"
+        />
         <Providers>
           <div className="min-h-screen flex flex-col">
             <ResponsiveHeader />

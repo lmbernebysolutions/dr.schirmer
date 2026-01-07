@@ -15,10 +15,12 @@ import {
   TestTube,
   Newspaper,
   Download,
-  Building2
+  Building2,
+  Calendar
 } from 'lucide-react';
 import MedicalIcon from '../ui/MedicalIcon';
 import AlertAdmin from '../admin/AlertAdmin';
+import AppointmentButton from '@/components/ui/AppointmentButton';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -98,6 +100,14 @@ const Footer = () => {
                     <MapPin className="w-4 h-4 mt-0.5" />
                     <span>Schneeberger Straße 3<br />08321 Zschorlau</span>
                   </div>
+                  <div className="pt-1">
+                    <AppointmentButton 
+                      location="zschorlau" 
+                      variant="standalone" 
+                      label="Termin buchen" 
+                      className="w-full text-xs py-1"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -119,6 +129,14 @@ const Footer = () => {
                   <div className="flex items-start space-x-2">
                     <MapPin className="w-4 h-4 mt-0.5" />
                     <span>Schwarzenberger Straße 7<br />08280 Aue</span>
+                  </div>
+                  <div className="pt-1">
+                    <AppointmentButton 
+                      location="aue" 
+                      variant="standalone" 
+                      label="Termin buchen" 
+                      className="w-full text-xs py-1"
+                    />
                   </div>
                 </div>
               </div>

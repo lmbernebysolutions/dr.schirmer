@@ -465,16 +465,24 @@ const HomePage: React.FC = () => {
               </div>
     
               <div className="flex flex-col sm:flex-row gap-3">
-                <button 
-                  onClick={() => window.open('tel:0377120208')}
-                  className="flex-1 basis-0 min-w-0 bg-[#FF0000] text-white rounded-full px-6 py-3 font-bold hover:bg-[#CC0000] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center min-h-[48px]"
-                >
-                  <Phone className="mr-2 h-4 w-4" />
-                  Anrufen
-                </button>
+                <div className="flex-1 flex flex-col gap-2">
+                  <button 
+                    onClick={() => window.open('tel:0377120208')}
+                    className="w-full bg-[#FF0000] text-white rounded-full px-6 py-3 font-bold hover:bg-[#CC0000] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center min-h-[48px]"
+                  >
+                    <Phone className="mr-2 h-4 w-4" />
+                    Anrufen
+                  </button>
+                  <AppointmentButton 
+                    location="aue" 
+                    variant="overlay" 
+                    label="Termin buchen" 
+                    className="w-full justify-center shadow-md font-bold"
+                  />
+                </div>
                 <button 
                   onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Schwarzenberger+Straße+7,+08280+Aue')}
-                  className="flex-1 basis-0 min-w-0 bg-red-100 text-red-600 rounded-full px-6 py-3 font-bold hover:bg-red-200 transition-all duration-300 transform hover:scale-105 flex items-center justify-center min-h-[48px]"
+                  className="flex-1 basis-0 min-w-0 bg-red-100 text-red-600 rounded-full px-6 py-3 font-bold hover:bg-red-200 transition-all duration-300 transform hover:scale-105 flex items-center justify-center min-h-[48px] self-start"
                 >
                   <Navigation className="mr-2 h-4 w-4" />
                   Route

@@ -6,6 +6,7 @@ import { MapPin, Phone, Clock, Car, Accessibility, Navigation, Route } from 'luc
 import AnimatedCard from '@/components/ui/AnimatedCard';
 import GradientButton from '@/components/ui/GradientButton';
 import FloatingElement from '@/components/ui/FloatingElement';
+import AppointmentButton from '@/components/ui/AppointmentButton';
 
 interface AnimatedHeroProps {
   selectedMap: 'zschorlau' | 'aue';
@@ -117,20 +118,27 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
             </motion.div>
 
             <motion.div 
-              className="flex flex-wrap justify-center lg:justify-start grid-spacing-sm"
+              className="flex flex-wrap justify-center lg:justify-start gap-4 grid-spacing-sm"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <button
-                onClick={() => setShowPhoneModal(true)}
-                className="flex items-center bg-white text-gray-700 px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
-                <Phone className="w-5 h-5 mr-2 text-green-600" />
-                Termin vereinbaren
-              </button>
+              <div className="flex flex-col gap-2 w-full sm:w-auto">
+                <AppointmentButton 
+                  location="zschorlau" 
+                  variant="overlay" 
+                  label="Termin Zschorlau" 
+                  className="w-full justify-center shadow-lg hover:shadow-xl"
+                />
+                <AppointmentButton 
+                  location="aue" 
+                  variant="overlay" 
+                  label="Termin Aue" 
+                  className="w-full justify-center shadow-lg hover:shadow-xl"
+                />
+              </div>
               
-              <button className="flex items-center bg-white text-gray-700 px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <button className="flex items-center justify-center bg-white text-gray-700 px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 w-full sm:w-auto h-fit self-start">
                 <Navigation className="w-5 h-5 mr-2 text-blue-600" />
                 Route planen
               </button>

@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Menu, X, Bell, ChevronDown, ChevronUp } from 'lucide-react';
+import { Menu, X, Bell, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
 import { AlertSettings } from '@/types/notion';
+import AppointmentButton from '@/components/ui/AppointmentButton';
 
 const ResponsiveHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -283,6 +284,24 @@ const ResponsiveHeader = () => {
                   {isAlertExpanded ? <ChevronUp className="w-2 h-2" /> : <ChevronDown className="w-2 h-2" />}
                 </button>
               )}
+
+              {/* Appointment Buttons - Desktop */}
+              <div className="hidden xl:flex items-center space-x-2">
+                <AppointmentButton 
+                  location="zschorlau" 
+                  variant="overlay" 
+                  label="Termin Zschorlau" 
+                  className="px-3 py-2 text-xs font-semibold shadow-md hover:shadow-lg min-h-[48px]"
+                  showIcon={true}
+                />
+                <AppointmentButton 
+                  location="aue" 
+                  variant="overlay" 
+                  label="Termin Aue" 
+                  className="px-3 py-2 text-xs font-semibold shadow-md hover:shadow-lg min-h-[48px]"
+                  showIcon={true}
+                />
+              </div>
 
               {/* Contact Button - Desktop */}
               <button

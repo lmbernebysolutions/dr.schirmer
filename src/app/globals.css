@@ -869,3 +869,25 @@
 .accordion-item.open .accordion-icon {
   transform: rotate(135deg);
 }
+
+/* ==========================================================================
+   Medatixx Terminbuchung Overlay Fix
+   ========================================================================== */
+
+/* Erzwinge einen extrem hohen Z-Index für das Overlay und den Iframe */
+iframe[src*="medatixx"],
+.terminbuchung-overlay,
+div[class*="terminbuchung"],
+div[id*="termin"] {
+  z-index: 2147483646 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+

@@ -168,12 +168,14 @@ const HomePage: React.FC = () => {
                           variant="overlay" 
                           label="Praxis Zschorlau" 
                           className="w-full justify-start text-sm shadow-sm"
+                          onComplete={() => setIsAppointmentPickerOpen(false)}
                         />
                         <AppointmentButton 
                           location="aue" 
                           variant="overlay" 
                           label="Praxis Aue" 
                           className="w-full justify-start text-sm shadow-sm"
+                          onComplete={() => setIsAppointmentPickerOpen(false)}
                         />
                       </motion.div>
                     )}
@@ -287,12 +289,14 @@ const HomePage: React.FC = () => {
                             variant="overlay" 
                             label="Praxis Zschorlau" 
                             className="w-full justify-start text-sm shadow-sm"
+                            onComplete={() => setIsAppointmentPickerOpen(false)}
                           />
                           <AppointmentButton 
                             location="aue" 
                             variant="overlay" 
                             label="Praxis Aue" 
                             className="w-full justify-start text-sm shadow-sm"
+                            onComplete={() => setIsAppointmentPickerOpen(false)}
                           />
                         </motion.div>
                       )}

@@ -9,6 +9,7 @@ interface AppointmentButtonProps {
   label?: string;
   className?: string;
   showIcon?: boolean;
+  onComplete?: () => void;
 }
 
 const AppointmentButton: React.FC<AppointmentButtonProps> = ({
@@ -17,6 +18,7 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ({
   label = 'Termin buchen',
   className = '',
   showIcon = true,
+  onComplete,
 }) => {
   const config = {
     zschorlau: {
@@ -46,6 +48,10 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ({
   if (variant === 'overlay') {
     const handleClick = (e: React.MouseEvent) => {
       e.preventDefault(); // Verhindere Navigation/Default
+      
+      if (onComplete) {
+        onComplete();
+      }
       
       // Toggle-Logik: Prüfen ob Overlay offen ist
       const existingOverlays = document.querySelectorAll('iframe[src*="medatixx"], div[class*="terminbuchung"]');

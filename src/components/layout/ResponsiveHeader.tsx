@@ -311,12 +311,14 @@ const ResponsiveHeader = () => {
                       variant="overlay" 
                       label="Praxis Zschorlau" 
                       className="w-full justify-start text-sm shadow-sm"
+                      onComplete={() => setIsAppointmentPickerOpen(false)}
                     />
                     <AppointmentButton 
                       location="aue" 
                       variant="overlay" 
                       label="Praxis Aue" 
                       className="w-full justify-start text-sm shadow-sm"
+                      onComplete={() => setIsAppointmentPickerOpen(false)}
                     />
                   </motion.div>
                 )}
@@ -344,12 +346,14 @@ const ResponsiveHeader = () => {
                       variant="overlay" 
                       label="Zschorlau" 
                       className="w-full justify-start text-xs shadow-sm"
+                      onComplete={() => setIsAppointmentPickerOpen(false)}
                     />
                     <AppointmentButton 
                       location="aue" 
                       variant="overlay" 
                       label="Aue" 
                       className="w-full justify-start text-xs shadow-sm"
+                      onComplete={() => setIsAppointmentPickerOpen(false)}
                     />
                   </motion.div>
                 )}
@@ -413,12 +417,14 @@ const ResponsiveHeader = () => {
                     variant="overlay" 
                     label="Zschorlau" 
                     className="w-full justify-center text-sm py-3 shadow-md"
+                    onComplete={() => setIsMenuOpen(false)}
                   />
                   <AppointmentButton 
                     location="aue" 
                     variant="overlay" 
                     label="Aue" 
                     className="w-full justify-center text-sm py-3 shadow-md"
+                    onComplete={() => setIsMenuOpen(false)}
                   />
                 </div>
               </div>

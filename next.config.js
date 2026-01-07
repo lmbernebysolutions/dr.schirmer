@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // output: 'export', // Removed for Vercel deployment
-  trailingSlash: true,
+  // trailingSlash: true, // Removed to fix Vercel 404
   images: {
     unoptimized: true, // Kann auf false gesetzt werden für Vercel Image Optimization, aber true ist sicherer für Konsistenz
     domains: ['localhost'],

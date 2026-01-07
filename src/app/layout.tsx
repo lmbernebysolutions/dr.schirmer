@@ -4,7 +4,7 @@ import './globals.css';
 import ResponsiveHeader from '@/components/layout/ResponsiveHeader';
 import Footer from '@/components/layout/Footer';
 import { Providers } from '@/components/Providers';
-import PasswordProtection from '@/components/PasswordProtection';
+// PasswordProtection removed for public website - Admin panel still protected
 import { PRACTICES } from '@/config/company';
 
 // Font configuration - Organic & Human-Centric
@@ -80,18 +80,11 @@ export default function RootLayout({
   return (
     <html lang="de" className={quicksand.variable}>
       <head>
-        {/* Preconnect to external domains for performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
-        {/* DNS Prefetch for better performance */}
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        
-        {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        {/* Favicon - logo01.png */}
+        <link rel="icon" type="image/png" href="/images/logo01.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/logo01.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/logo01.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/logo01.png" />
         <link rel="manifest" href="/site.webmanifest" />
         
         {/* Theme Color */}
@@ -179,24 +172,22 @@ export default function RootLayout({
         />
       </head>
       <body className={`${quicksand.className} antialiased`}>
-        <PasswordProtection>
-          <Providers>
-            <div className="min-h-screen flex flex-col">
-              <ResponsiveHeader />
-              
-              {/* Skip Links für Accessibility */}
-              <a href="#main-content" className="skip-link">
-                Zum Hauptinhalt springen
-              </a>
-              
-              <main id="main-content" className="flex-1">
-                {children}
-              </main>
-              
-              <Footer />
-            </div>
-          </Providers>
-        </PasswordProtection>
+        <Providers>
+          <div className="min-h-screen flex flex-col">
+            <ResponsiveHeader />
+            
+            {/* Skip Links für Accessibility */}
+            <a href="#main-content" className="skip-link">
+              Zum Hauptinhalt springen
+            </a>
+            
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
+            
+            <Footer />
+          </div>
+        </Providers>
       </body>
     </html>
   );

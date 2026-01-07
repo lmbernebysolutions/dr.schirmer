@@ -10,6 +10,7 @@ export class Analytics {
   private static instance: Analytics;
   private measurementId: string;
   private consentGranted: boolean = false;
+  private scriptLoaded: boolean = false;
 
   constructor(measurementId: string) {
     this.measurementId = measurementId;
@@ -22,15 +23,32 @@ export class Analytics {
     return Analytics.instance;
   }
 
-  // Initialize Google Analytics
+  // Initialize Google Analytics - ONLY when consent is granted
+  // This method MUST only be called after user has actively consented
+  // to comply with TDDDG (Telekommunikation-Digitale-Dienste-Datenschutzgesetz)
+  // Das Skript darf erst geladen werden, nachdem der Nutzer aktiv zugestimmt hat
   initialize() {
     if (typeof window === 'undefined') return;
 
-    // Load Google Analytics script
+    // CRITICAL: Do not load script or send any data without explicit consent
+    // This violates TDDDG if called before consent
+    // Gemäß TDDDG erfordert bereits das Laden des Skripts eine vorherige, ausdrückliche Einwilligung
+    if (!this.consentGranted) {
+      console.warn('⚠️ Analytics.initialize() called without consent. Script will not be loaded.');
+      return;
+    }
+
+    // Prevent multiple script loads
+    if (this.scriptLoaded) {
+      return;
+    }
+
+    // Load Google Analytics script ONLY after consent
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${this.measurementId}`;
     document.head.appendChild(script);
+    this.scriptLoaded = true;
 
     // Initialize gtag
     window.dataLayer = window.dataLayer || [];
@@ -47,14 +65,21 @@ export class Analytics {
     });
   }
 
-  // Update consent
+  // Update consent - initializes Analytics when consent is granted
   updateConsent(consent: {
     analytics: boolean;
     marketing: boolean;
     preferences: boolean;
   }) {
+    const previousConsent = this.consentGranted;
     this.consentGranted = consent.analytics;
     
+    // Initialize Analytics ONLY when consent is granted for the first time
+    if (consent.analytics && !previousConsent && !this.scriptLoaded) {
+      this.initialize();
+    }
+    
+    // Update consent in gtag if already initialized
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: consent.analytics ? 'granted' : 'denied',

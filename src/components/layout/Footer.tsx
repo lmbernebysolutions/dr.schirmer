@@ -25,10 +25,10 @@ const Footer = () => {
 
   const quickLinks = [
     { name: 'Standorte', href: '#locations', icon: Home },
-    { name: 'Unsere Leistungen', href: '#services', icon: Stethoscope },
+    { name: 'Aktuelles', href: '#blog', icon: Newspaper },
+    { name: 'Leistungen', href: '#services', icon: Stethoscope },
     { name: 'Team', href: '#team', icon: Users },
     { name: 'Labor', href: '#labor', icon: TestTube },
-    { name: 'Aktuelles', href: '#blog', icon: Newspaper },
     { name: 'Downloads', href: '#downloads', icon: Download },
   ];
 
@@ -44,8 +44,8 @@ const Footer = () => {
           {/* Spalte 1: Praxis-Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <h3 className="text-xl font-bold text-black mx-4">Hausarztpraxis Dr. Schirmer</h3>
-            </div>
+                  <h3 className="text-xl font-bold text-black mx-4">Hausarztpraxis Dr. Schirmer</h3>
+                </div>
                 <p className="text-gray-600 leading-relaxed">
               Ihre vertrauensvolle Hausarztpraxis in Zschorlau und Aue. 
               Mit moderner Ausstattung und persönlicher Betreuung für die ganze Familie.
@@ -83,10 +83,17 @@ const Footer = () => {
               <div className="space-y-2">
                 <h5 className="text-sm font-medium text-yellow-500">Praxis Zschorlau</h5>
                 <div className="space-y-1 text-sm">
-                  <div className="flex items-center space-x-2">
+                  <a href="tel:037715653950" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
                     <Phone className="w-4 h-4" />
                     <span>03771 / 56 53 950</span>
-                  </div>
+                  </a>
+                  <a href="tel:037715653958" className="flex items-center space-x-2 bg-yellow-50 px-2 py-1 rounded border-l-2 border-yellow-500 hover:bg-yellow-100 transition-colors">
+                    <Phone className="w-4 h-4 text-yellow-600" />
+                    <div>
+                      <span className="font-bold text-yellow-800 text-xs">Rezepttelefon:</span>
+                      <span className="ml-1 font-semibold">03771 / 56 53 958</span>
+                    </div>
+                  </a>
                   <div className="flex items-start space-x-2">
                     <MapPin className="w-4 h-4 mt-0.5" />
                     <span>Schneeberger Straße 3<br />08321 Zschorlau</span>
@@ -98,10 +105,17 @@ const Footer = () => {
               <div className="space-y-2">
                 <h5 className="text-sm font-medium text-red-500">Praxis Aue</h5>
                 <div className="space-y-1 text-sm">
-                  <div className="flex items-center space-x-2">
+                  <a href="tel:0377120208" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
                     <Phone className="w-4 h-4" />
                     <span>03771 / 20 208</span>
-                  </div>
+                  </a>
+                  <a href="tel:03771450032" className="flex items-center space-x-2 bg-red-50 px-2 py-1 rounded border-l-2 border-red-500 hover:bg-red-100 transition-colors">
+                    <Phone className="w-4 h-4 text-red-600" />
+                    <div>
+                      <span className="font-bold text-red-800 text-xs">Rezepttelefon:</span>
+                      <span className="ml-1 font-semibold">03771 / 45 00 32</span>
+                    </div>
+                  </a>
                   <div className="flex items-start space-x-2">
                     <MapPin className="w-4 h-4 mt-0.5" />
                     <span>Schwarzenberger Straße 7<br />08280 Aue</span>
@@ -143,6 +157,20 @@ const Footer = () => {
             <div className="flex items-center space-x-4">
               <AlertAdmin />
             </div>
+          </div>
+        </div>
+
+        {/* Designed by Berneby Solutions */}
+        <div className="border-t border-gray-200 mt-6 pt-6">
+          <div className="flex justify-center">
+            <a 
+              href="https://wa.me/4915511960927"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-gray-400 hover:text-gray-600 transition-colors duration-300 tracking-widest uppercase"
+            >
+              Designed by Berneby Solutions
+            </a>
           </div>
         </div>
       </div>

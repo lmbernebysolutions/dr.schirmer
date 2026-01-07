@@ -6,6 +6,7 @@ export interface PracticeInfo {
   location: string;
   address: string;
   phone: string;
+  prescriptionPhone: string;
   fax: string;
   email: string;
   type: 'hauptstandort' | 'zweigstelle' | 'landarztpraxis';
@@ -29,6 +30,7 @@ export const PRACTICES: PracticeInfo[] = [
     location: 'Zschorlau',
     address: 'Schneeberger Straße 3, 08321 Zschorlau',
     phone: '03771 / 56 53 950',
+    prescriptionPhone: '03771 / 56 53 958',
     fax: '03771 / 56 53 959',
     email: 'hausarztpraxis-dr-schirmer@web.de',
     type: 'landarztpraxis',
@@ -50,6 +52,7 @@ export const PRACTICES: PracticeInfo[] = [
     location: 'Aue',
     address: 'Schwarzenberger Straße 7, 08280 Aue',
     phone: '03771 / 20 208',
+    prescriptionPhone: '03771 / 45 00 32',
     fax: '03771 / 25 90 944',
     email: 'hausarztpraxis-dr-schirmer@web.de',
     type: 'zweigstelle',
@@ -57,9 +60,9 @@ export const PRACTICES: PracticeInfo[] = [
     openingHours: {
       monday: '07:30 - 12:00 & 14:00 - 17:00',
       tuesday: '07:30 - 12:00 & 14:00 - 17:00',
-      wednesday: 'Geschlossen',
-      thursday: 'Geschlossen',
-      friday: 'Geschlossen',
+      wednesday: '07:30 - 12:00',
+      thursday: '07:30 - 12:00 & 14:00 - 18:00',
+      friday: '07:30 - 12:00',
       saturday: 'Geschlossen',
       sunday: 'Geschlossen'
     }

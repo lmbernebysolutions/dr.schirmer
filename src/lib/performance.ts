@@ -144,9 +144,10 @@ export const resourceHints = {
   ],
   
   // DNS prefetch for external domains
+  // NOTE: Google Fonts removed - using next/font/google for local hosting (DSGVO-compliant)
+  // NOTE: Google Analytics removed - only loaded after explicit user consent
   dnsPrefetch: [
-    'https://fonts.googleapis.com',
-    'https://www.google-analytics.com'
+    // No external DNS prefetch needed - all resources are self-hosted or consent-gated
   ]
 };
 

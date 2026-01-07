@@ -356,17 +356,17 @@ const DatenschutzPage: React.FC = () => {
                 </div>
               </section>
 
-              {/* Kontaktformular / E-Mail-Kontakt */}
+              {/* E-Mail-Kontakt */}
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <Mail className="w-6 h-6 mr-2 text-blue-600" />
-                  9. Kontaktformular und E-Mail-Kontakt
+                  9. E-Mail-Kontakt
                 </h2>
                 <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 space-y-3">
                   <p className="text-gray-700">
-                    Wenn Sie uns per E-Mail oder über ein Kontaktformular kontaktieren, werden die 
-                    von Ihnen mitgeteilten Daten (Name, E-Mail-Adresse, Nachricht) von uns gespeichert, 
-                    um Ihre Fragen zu beantworten.
+                    Wenn Sie uns per E-Mail kontaktieren, werden die von Ihnen mitgeteilten 
+                    Daten (Name, E-Mail-Adresse, Nachricht) von uns gespeichert, um Ihre Fragen 
+                    zu beantworten.
                   </p>
                   <p className="text-gray-700">
                     <strong>Zweck:</strong> Bearbeitung Ihrer Anfrage, Kommunikation
@@ -389,11 +389,60 @@ const DatenschutzPage: React.FC = () => {
                 </div>
               </section>
 
+              {/* WhatsApp-Kontakt */}
+              <section>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <Globe className="w-6 h-6 mr-2 text-blue-600" />
+                  10. WhatsApp-Kontakt
+                </h2>
+                <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 space-y-3">
+                  <p className="text-gray-700">
+                    Auf unserer Website bieten wir Ihnen die Möglichkeit, uns über WhatsApp zu 
+                    kontaktieren. WhatsApp ist ein Dienst der Meta Platforms Ireland Limited, 
+                    4 Grand Canal Square, Grand Canal Harbour, Dublin 2, Irland (bzw. für Nutzer 
+                    außerhalb der EU: WhatsApp LLC, 1601 Willow Road, Menlo Park, California 94025, USA).
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Wichtiger Hinweis:</strong> Wenn Sie den WhatsApp-Button auf unserer 
+                    Website nutzen, werden Sie zu WhatsApp weitergeleitet. Dabei werden Daten 
+                    (insbesondere Ihre IP-Adresse, Geräteinformationen und die von Ihnen gesendeten 
+                    Nachrichten) an WhatsApp/Meta übertragen und auf deren Servern verarbeitet.
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Zweck:</strong> Ermöglichung einer schnellen und unkomplizierten 
+                    Kontaktaufnahme für Terminvereinbarungen und allgemeine Anfragen
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) – 
+                    Die Nutzung erfolgt freiwillig durch aktives Klicken auf den WhatsApp-Button
+                  </p>
+                  <div className="bg-red-50 rounded-lg p-4 border border-red-200 mt-4">
+                    <p className="text-sm text-gray-700">
+                      <strong>⚠️ Wichtig:</strong> Bitte senden Sie über WhatsApp keine sensiblen 
+                      Gesundheitsdaten oder vertraulichen medizinischen Informationen. Für solche 
+                      Anfragen nutzen Sie bitte den telefonischen Kontakt oder kommen Sie persönlich 
+                      in die Praxis.
+                    </p>
+                  </div>
+                  <p className="text-gray-700 mt-4">
+                    <strong>Datenschutzerklärung von Meta/WhatsApp:</strong>{' '}
+                    <a 
+                      href="https://www.whatsapp.com/legal/privacy-policy" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-700 underline"
+                    >
+                      https://www.whatsapp.com/legal/privacy-policy
+                    </a>
+                  </p>
+                </div>
+              </section>
+
               {/* Speicherdauer */}
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <Database className="w-6 h-6 mr-2 text-blue-600" />
-                  10. Speicherdauer
+                  11. Speicherdauer
                 </h2>
                 <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 space-y-3">
                   <p className="text-gray-700">
@@ -431,14 +480,14 @@ const DatenschutzPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <Eye className="w-6 h-6 mr-2 text-blue-600" />
-                  11. Ihre Rechte als Betroffener
+                  12. Ihre Rechte als Betroffener
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="bg-white rounded-xl p-4 border border-gray-200">
-                      <div className="flex items-start">
-                        <Eye className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
-                        <div>
+                    <div className="flex items-start">
+                      <Eye className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+                      <div>
                           <h3 className="font-semibold text-gray-900">Auskunftsrecht (Art. 15 DSGVO)</h3>
                           <p className="text-gray-700 text-sm mt-1">
                             Sie haben das Recht, Auskunft über die von uns verarbeiteten 
@@ -448,9 +497,9 @@ const DatenschutzPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-gray-200">
-                      <div className="flex items-start">
-                        <Database className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
-                        <div>
+                    <div className="flex items-start">
+                      <Database className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+                      <div>
                           <h3 className="font-semibold text-gray-900">Berichtigungsrecht (Art. 16 DSGVO)</h3>
                           <p className="text-gray-700 text-sm mt-1">
                             Sie haben das Recht, die Berichtigung unrichtiger oder die 
@@ -499,9 +548,9 @@ const DatenschutzPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-gray-200">
-                      <div className="flex items-start">
+                    <div className="flex items-start">
                         <AlertCircle className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
-                        <div>
+                      <div>
                           <h3 className="font-semibold text-gray-900">Widerspruchsrecht (Art. 21 DSGVO)</h3>
                           <p className="text-gray-700 text-sm mt-1">
                             Sie haben das Recht, der Verarbeitung Ihrer Daten zu widersprechen, 
@@ -511,9 +560,9 @@ const DatenschutzPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-gray-200">
-                      <div className="flex items-start">
-                        <Shield className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
-                        <div>
+                    <div className="flex items-start">
+                      <Shield className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+                      <div>
                           <h3 className="font-semibold text-gray-900">Widerruf der Einwilligung (Art. 7 DSGVO)</h3>
                           <p className="text-gray-700 text-sm mt-1">
                             Sie können eine erteilte Einwilligung jederzeit widerrufen. 
@@ -530,7 +579,7 @@ const DatenschutzPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <AlertCircle className="w-6 h-6 mr-2 text-blue-600" />
-                  12. Beschwerderecht bei Aufsichtsbehörde
+                  13. Beschwerderecht bei Aufsichtsbehörde
                 </h2>
                 <div className="bg-red-50 rounded-2xl p-6 border border-red-200">
                   <p className="text-gray-700 mb-4">
@@ -573,7 +622,7 @@ const DatenschutzPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <Lock className="w-6 h-6 mr-2 text-blue-600" />
-                  13. Datensicherheit
+                  14. Datensicherheit
                 </h2>
                 <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 space-y-3">
                   <p className="text-gray-700">
@@ -600,7 +649,7 @@ const DatenschutzPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <FileText className="w-6 h-6 mr-2 text-blue-600" />
-                  14. Änderungen dieser Datenschutzerklärung
+                  15. Änderungen dieser Datenschutzerklärung
                 </h2>
                 <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
                   <p className="text-gray-700">
@@ -616,7 +665,7 @@ const DatenschutzPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <Mail className="w-6 h-6 mr-2 text-blue-600" />
-                  15. Kontakt bei Fragen zum Datenschutz
+                  16. Kontakt bei Fragen zum Datenschutz
                 </h2>
                 <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200">
                   <p className="text-gray-700 mb-4">
@@ -656,8 +705,8 @@ const DatenschutzPage: React.FC = () => {
                           Dr. med. Lars Schirmer<br />
                           Schneeberger Straße 3<br />
                           08321 Zschorlau
-                        </p>
-                      </div>
+                </p>
+              </div>
                     </div>
                   </div>
                 </div>

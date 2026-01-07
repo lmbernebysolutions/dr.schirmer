@@ -49,15 +49,15 @@ const AlertAdmin: React.FC = () => {
 
   const loadData = async () => {
     setIsLoading(true);
-    try {
+      try {
       const response = await fetch('/data/content.json?t=' + new Date().getTime()); // Cache busting
-      if (response.ok) {
+        if (response.ok) {
         const jsonData = await response.json();
         setData(jsonData);
       } else {
         console.error('Fehler beim Laden der Daten');
-      }
-    } catch (error) {
+        }
+      } catch (error) {
       console.error('Fetch error:', error);
     } finally {
       setIsLoading(false);
@@ -66,7 +66,7 @@ const AlertAdmin: React.FC = () => {
 
   const saveData = async (newData: ContentData) => {
     setIsLoading(true);
-    try {
+        try {
       const response = await fetch('/api/save_data.php', {
         method: 'POST',
         headers: {
@@ -84,14 +84,14 @@ const AlertAdmin: React.FC = () => {
         window.dispatchEvent(new CustomEvent('contentUpdated'));
       } else {
         alert('Fehler beim Speichern: ' + result.message);
-      }
-    } catch (error) {
+          }
+        } catch (error) {
       console.error('Save error:', error);
       alert('Verbindungsfehler beim Speichern.');
     } finally {
       setIsLoading(false);
-    }
-  };
+        }
+      };
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,9 +123,9 @@ const AlertAdmin: React.FC = () => {
     
     if (index >= 0) {
       newNews[index] = post;
-    } else {
+        } else {
       newNews.push(post);
-    }
+        }
     
     // Sortieren nach Datum
     newNews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -198,14 +198,14 @@ const AlertAdmin: React.FC = () => {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between bg-gray-50 p-4 rounded-xl">
                       <span className="font-medium">Anzeige auf Website</span>
-                      <button 
+                      <button
                         onClick={() => updateAlert({ isVisible: !data.alert.isVisible })}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${data.alert.isVisible ? 'bg-green-500' : 'bg-gray-300'}`}
                       >
                         <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${data.alert.isVisible ? 'translate-x-6' : 'translate-x-1'}`} />
                       </button>
                     </div>
-                    <textarea 
+                    <textarea
                       value={data.alert.text}
                       onChange={(e) => updateAlert({ text: e.target.value })}
                       className="w-full h-32 border rounded-xl p-4 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
@@ -213,7 +213,7 @@ const AlertAdmin: React.FC = () => {
                     />
                     <button onClick={saveAlert} disabled={isLoading} className="w-full bg-green-600 text-white rounded-full py-3 font-bold hover:bg-green-700 disabled:opacity-50 flex items-center justify-center">
                       <Save className="w-5 h-5 mr-2" /> Speichern
-                    </button>
+                      </button>
                   </div>
                 )}
 
@@ -222,14 +222,14 @@ const AlertAdmin: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <h4 className="font-bold">Einträge ({data.news.length})</h4>
-                      <button 
+                      <button
                         onClick={() => { setSelectedPost(null); setShowNewsForm(true); }}
                         className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-700 flex items-center"
                       >
                         <Plus className="w-4 h-4 mr-1" /> Neu
                       </button>
                     </div>
-                    
+
                     <div className="space-y-3 max-h-[400px] overflow-y-auto">
                       {data.news.map(post => (
                         <div key={post.id} className="border rounded-xl p-4 flex justify-between items-center hover:bg-gray-50">
@@ -261,8 +261,8 @@ const AlertAdmin: React.FC = () => {
           <div className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl">
             <h3 className="text-xl font-bold mb-4">{selectedPost ? 'Bearbeiten' : 'Neuer Eintrag'}</h3>
             <NewsForm 
-              post={selectedPost} 
-              onSave={handleNewsSave} 
+              post={selectedPost}
+              onSave={handleNewsSave}
               onCancel={() => setShowNewsForm(false)} 
             />
           </div>
@@ -286,14 +286,14 @@ const NewsForm = ({ post, onSave, onCancel }: { post: NewsPost | null, onSave: (
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); onSave(formData); }} className="space-y-4">
-      <div>
+    <div>
         <label className="block text-sm font-bold mb-1">Titel</label>
         <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full border rounded-lg p-2" />
       </div>
-      <div>
+        <div>
         <label className="block text-sm font-bold mb-1">Text</label>
         <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full border rounded-lg p-2 h-24" />
-      </div>
+        </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-bold mb-1">Datum</label>
@@ -302,30 +302,30 @@ const NewsForm = ({ post, onSave, onCancel }: { post: NewsPost | null, onSave: (
         <div>
           <label className="block text-sm font-bold mb-1">Icon</label>
           <select value={formData.icon} onChange={e => setFormData({...formData, icon: e.target.value})} className="w-full border rounded-lg p-2">
-            <option value="calendar">Kalender</option>
-            <option value="heart">Herz</option>
-            <option value="shield">Schild</option>
-          </select>
-        </div>
+              <option value="calendar">Kalender</option>
+              <option value="heart">Herz</option>
+              <option value="shield">Schild</option>
+            </select>
+          </div>
       </div>
       <div className="flex items-center space-x-4">
         <label className="flex items-center cursor-pointer">
           <input type="checkbox" checked={formData.published} onChange={e => setFormData({...formData, published: e.target.checked})} className="mr-2" />
           Veröffentlicht
-        </label>
+            </label>
         <label className="flex items-center cursor-pointer">
           <span className="mr-2 text-sm font-bold">Farbe:</span>
           <select value={formData.color} onChange={e => setFormData({...formData, color: e.target.value})} className="border rounded-lg p-1">
-            <option value="yellow">Gelb</option>
-            <option value="red">Rot</option>
-          </select>
+              <option value="yellow">Gelb</option>
+              <option value="red">Rot</option>
+            </select>
         </label>
-      </div>
+          </div>
       <div className="flex space-x-3 pt-4">
         <button type="submit" className="flex-1 bg-green-600 text-white rounded-full py-3 font-bold hover:bg-green-700">Speichern</button>
         <button type="button" onClick={onCancel} className="flex-1 bg-gray-200 text-gray-800 rounded-full py-3 font-bold hover:bg-gray-300">Abbrechen</button>
-      </div>
-    </form>
+        </div>
+      </form>
   );
 };
 

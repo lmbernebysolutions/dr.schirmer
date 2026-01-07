@@ -59,12 +59,12 @@ const DoctorsTeam: React.FC = () => {
 
     return (
       <div className="bg-white rounded-2xl p-4 shadow-md hover:shadow-lg transition-all duration-300 text-center w-48">
-        <div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden">
+        <div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden bg-gray-100">
           {doctor.image ? (
             <img 
               src={doctor.image} 
               alt={doctor.name} 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-[85%_30%]"
             />
           ) : (
             <div className={`w-full h-full flex items-center justify-center text-white text-lg font-bold ${colors.bg}`}>
@@ -111,9 +111,9 @@ const DoctorsTeam: React.FC = () => {
             </h3>
             <div className="relative element-spacing">
               <img 
-                src="/images/Schwesternteam 2025.jpg" 
-                alt="Schwesternteam 2025" 
-                className="w-64 md:w-80 h-64 md:h-80 mx-auto rounded-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-lg"
+                src="/images/Unsere Schwestern.webp" 
+                alt="Unsere Schwestern" 
+                className="w-80 md:w-[28rem] h-80 md:h-[28rem] mx-auto rounded-full object-contain object-[60%_center] group-hover:scale-105 transition-transform duration-300 shadow-lg bg-gray-100"
                 loading="lazy"
                 decoding="async"
               />
@@ -122,9 +122,9 @@ const DoctorsTeam: React.FC = () => {
               </div>
             </div>
             {/* Schwesternnamen in klein */}
-            <p className="text-xs text-gray-400 mt-4">
+              <p className="text-xs text-gray-400 mt-4">
               Mandy, Lilly, Sylvia, Conny, Monique
-            </p>
+              </p>
           </div>
 
           {/* Rechte Spalte: Unsere Ärzte */}
@@ -134,9 +134,9 @@ const DoctorsTeam: React.FC = () => {
             </h3>
             <div className="relative element-spacing">
               <img 
-                src="/images/picture01.jpg" 
-                alt="Medizinische Fachangestellte" 
-                className="w-64 md:w-80 h-64 md:h-80 mx-auto rounded-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-lg"
+                src="/images/Unsere Aerzte.webp" 
+                alt="Unsere Ärzte" 
+                className="w-72 md:w-96 h-72 md:h-96 mx-auto rounded-full object-contain group-hover:scale-105 transition-transform duration-300 shadow-lg bg-gray-100"
                 loading="lazy"
                 decoding="async"
               />

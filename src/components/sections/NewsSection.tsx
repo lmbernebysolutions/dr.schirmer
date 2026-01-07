@@ -15,7 +15,7 @@ const NewsSection: React.FC = () => {
         const data = await response.json();
         if (data.news) {
           const publishedPosts = data.news.filter((p: NewsPost) => p.published);
-          setPosts(publishedPosts);
+        setPosts(publishedPosts);
         }
       }
     } catch (error) {

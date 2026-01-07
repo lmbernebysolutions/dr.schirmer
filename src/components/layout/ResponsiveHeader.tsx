@@ -35,7 +35,7 @@ const ResponsiveHeader = () => {
 
   // Load alert settings from JSON (Fetch)
   const fetchAlertSettings = async () => {
-    try {
+      try {
       const response = await fetch('/data/content.json?t=' + new Date().getTime());
       if (response.ok) {
         const data = await response.json();
@@ -47,10 +47,10 @@ const ResponsiveHeader = () => {
           if (shouldAutoExpand && settings.isVisible) {
             setIsAlertExpanded(true);
           }
+          }
         }
-      }
-    } catch (error) {
-      console.error('Error loading alert settings:', error);
+      } catch (error) {
+        console.error('Error loading alert settings:', error);
     }
   };
 
@@ -202,8 +202,8 @@ const ResponsiveHeader = () => {
               })}
             </div>
 
-            {/* Laptop Navigation - Für 1280x800 und ähnliche */}
-            <div className="hidden lg:flex xl:hidden items-center space-x-0.5">
+            {/* Laptop/Tablet Navigation - Für 1024px-1280px (alle iPads) */}
+            <div className="hidden lg:flex xl:hidden items-center space-x-1">
               {navigation.slice(0, 6).map((item) => {
                 const sectionId = item.href.replace('#', '');
                 const isActive = activeSection === sectionId;
@@ -212,12 +212,11 @@ const ResponsiveHeader = () => {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`px-1 py-1 rounded-full text-black hover:text-gray-700 transition-all duration-300 font-medium ${
+                    className={`px-2 py-1.5 rounded-full text-black hover:text-gray-700 transition-all duration-300 font-medium text-sm ${
                       isActive 
                         ? 'bg-gray-100 text-black shadow-lg' 
                         : 'hover:bg-gray-50'
                     }`}
-                    style={{ fontSize: 'clamp(0.625rem, 1.1vw, 0.875rem)' }}
                   >
                     {item.name}
                   </Link>
@@ -225,9 +224,9 @@ const ResponsiveHeader = () => {
               })}
             </div>
 
-            {/* Tablet Navigation - Für 1024x600 und ähnliche */}
-            <div className="hidden md:flex lg:hidden items-center space-x-0.5">
-              {navigation.slice(0, 4).map((item) => {
+            {/* Tablet Navigation - Für 768px-1024px */}
+            <div className="hidden md:flex lg:hidden items-center space-x-1">
+              {navigation.slice(0, 5).map((item) => {
                 const sectionId = item.href.replace('#', '');
                 const isActive = activeSection === sectionId;
                 
@@ -235,12 +234,11 @@ const ResponsiveHeader = () => {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`px-1 py-1 rounded-full text-black hover:text-gray-700 transition-all duration-300 font-medium ${
+                    className={`px-2 py-1.5 rounded-full text-black hover:text-gray-700 transition-all duration-300 font-medium text-sm ${
                       isActive 
                         ? 'bg-gray-100 text-black shadow-lg' 
                         : 'hover:bg-gray-50'
                     }`}
-                    style={{ fontSize: 'clamp(0.625rem, 1.2vw, 0.875rem)' }}
                   >
                     {item.name}
                   </Link>

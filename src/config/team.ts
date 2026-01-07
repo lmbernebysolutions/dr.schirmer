@@ -19,7 +19,7 @@ export const DOCTORS: Doctor[] = [
     description: 'Praxisinhaber mit langjähriger Erfahrung in der Hausarztmedizin und Landarztpraxis',
     location: 'zschorlau',
     category: 'facharzt',
-    image: '/images/picture07.jpg',
+    image: '/images/Dr. med. Lars Schirmer.webp',
     specialties: ['Allgemeinmedizin', 'Landarztmedizin', 'Prävention']
   },
   {
@@ -29,6 +29,7 @@ export const DOCTORS: Doctor[] = [
     description: 'Facharzt für Allgemeinmedizin mit Schwerpunkt Familienmedizin und Prävention',
     location: 'aue',
     category: 'facharzt',
+    image: '/images/Dr. med. Lars Unger.webp',
     specialties: ['Familienmedizin', 'Prävention', 'Chronische Erkrankungen']
   },
   
@@ -40,6 +41,7 @@ export const DOCTORS: Doctor[] = [
     description: 'Engagierte Ärztin in der Weiterbildung mit Schwerpunkt auf Patientenbetreuung',
     location: 'both',
     category: 'weiterbildungsarzt',
+    image: '/images/Isabell.webp',
     specialties: ['Allgemeinmedizin', 'Patientenbetreuung']
   },
   {
@@ -49,6 +51,7 @@ export const DOCTORS: Doctor[] = [
     description: 'Neu im Team - Weiterbildungsärztin mit Schwerpunkt auf chronische Erkrankungen',
     location: 'both',
     category: 'weiterbildungsarzt',
+    image: '/images/Julia.webp',
     specialties: ['Chronische Erkrankungen', 'Allgemeinmedizin']
   },
   {

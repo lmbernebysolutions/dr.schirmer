@@ -45,9 +45,17 @@
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 
-# SPA routing for Next.js
+# SPA routing for Next.js - Exclude static assets
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    # Don't rewrite requests for static assets
+    RewriteCond %{REQUEST_URI} ^/_next/ [OR]
+    RewriteCond %{REQUEST_URI} ^/images/ [OR]
+    RewriteCond %{REQUEST_URI} ^/api/ [OR]
+    RewriteCond %{REQUEST_URI} ^/data/ [OR]
+    RewriteCond %{REQUEST_URI} \.(css|js|jpg|jpeg|png|gif|webp|svg|woff|woff2|ttf|eot|ico|pdf|json)$ [NC]
+    RewriteRule . - [L]
+    # Rewrite everything else to index.html
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ /index.html [L]

@@ -53,7 +53,13 @@ const HomePage: React.FC = () => {
   const [selectedMap, setSelectedMap] = React.useState<'zschorlau' | 'aue'>('zschorlau');
   const [showPhoneModal, setShowPhoneModal] = React.useState(false);
   const [openAccordions, setOpenAccordions] = React.useState<Set<string>>(new Set());
+  const [isMounted, setIsMounted] = React.useState(false);
   const { detailedConsent, openPreferencesModal } = useCookieConsent();
+
+  // Hydration Fix: Warte bis Client-Side Rendering abgeschlossen ist
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const toggleAccordion = (id: string) => {
     setOpenAccordions(prev => {
@@ -67,8 +73,8 @@ const HomePage: React.FC = () => {
     });
   };
 
-  // Prüfe ob Social-Cookies (Externe Dienste) erlaubt sind
-  const hasSocialConsent = detailedConsent?.Social?.consented === true;
+  // Prüfe ob Social-Cookies (Externe Dienste) erlaubt sind - nur nach Mount
+  const hasSocialConsent = isMounted && detailedConsent?.Social?.consented === true;
 
   // Google Maps Embed URLs (kein API Key benötigt für Static Server)
   const mapsEmbedUrls = {
@@ -85,26 +91,30 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="section-padding-xl bg-section-primary pt-4 md:pt-16">
-        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-          <motion.div 
-            className="text-center md:text-left"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <div className="flex items-center gap-4 md:gap-6 justify-center md:justify-start">
+      <section className="section-padding-xl bg-section-primary pt-4 md:pt-6 lg:pt-16">
+        <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-6">
+          {/* Mobile & Tablet: Vertikales Layout (bis 1280px - alle iPads, alle Tablets) */}
+          <div className="flex flex-col xl:hidden gap-6 md:gap-8 items-center">
+            <motion.div 
+              className="text-center w-full"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              {/* Stab-Bild ÜBER dem Text - zentriert */}
               <motion.img 
                 src="/images/stab.jpg" 
                 alt="Äskulapstab - Symbol der Medizin" 
-                className="hidden md:block h-[4rem] lg:h-[5rem] w-auto object-contain flex-shrink-0 self-center"
+                className="h-[2.5rem] md:h-[3rem] w-auto object-contain mx-auto mb-4"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               />
-              <div className="space-y-6">
+              
+              {/* Text-Bereich - vollständig zentriert */}
+              <div className="space-y-4 md:space-y-5">
                 <motion.h1 
-                  className="text-4xl md:text-6xl font-bold leading-tight text-gray-900"
+                  className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-gray-900"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
@@ -113,7 +123,7 @@ const HomePage: React.FC = () => {
                   <span className="block text-[#FF0000] hover:text-[#CC0000] transition-colors duration-300 cursor-pointer">Dr. Schirmer</span>
                 </motion.h1>
                 <motion.p 
-                  className="text-xl text-gray-600 leading-relaxed"
+                  className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto px-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
@@ -122,93 +132,155 @@ const HomePage: React.FC = () => {
                   Mit moderner Ausstattung und persönlicher Betreuung für die ganze Familie.
                 </motion.p>
                 <motion.div 
-                  className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+                  className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
                 >
                   <button 
                     onClick={() => document.getElementById('locations')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white rounded-full px-8 py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:from-amber-500 hover:to-yellow-500 min-h-[48px] min-w-[48px]"
+                    className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white rounded-full px-6 md:px-8 py-3 md:py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:from-amber-500 hover:to-yellow-500 min-h-[48px] text-sm md:text-base"
                   >
-                    <MapPin className="mr-2 h-5 w-5" />
-                    Zu unseren Praxen
+                    <MapPin className="mr-2 h-4 w-4 md:h-5 md:w-5" />
+                    <span className="whitespace-nowrap">Zu unseren Praxen</span>
                   </button>
                   <button 
                     onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="bg-[#FF0000] text-white rounded-full px-8 py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:bg-[#CC0000] min-h-[48px] min-w-[48px]"
+                    className="bg-[#FF0000] text-white rounded-full px-6 md:px-8 py-3 md:py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:bg-[#CC0000] min-h-[48px] text-sm md:text-base"
                   >
-                    <Phone className="mr-2 h-5 w-5" />
-                    Termin vereinbaren
+                    <Phone className="mr-2 h-4 w-4 md:h-5 md:w-5" />
+                    <span className="whitespace-nowrap">Termin vereinbaren</span>
                   </button>
                 </motion.div>
               </div>
-            </div>
-          </motion.div>
-          
-          {/* Tablet Praxis-Rechtecke */}
-          <div className="hidden md:flex lg:hidden justify-center mt-8">
-            <div className="flex gap-6 items-center">
-              <div className="flex flex-col items-center">
-                <div className="min-w-[180px] min-h-[180px] max-w-[200px] max-h-[200px] bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden hover:from-amber-500 hover:to-yellow-500 p-4">
-                  <ResponsiveImage 
-                    src="/images/logo01.png" 
-                    alt="Praxis Zschorlau Logo" 
-                    className="w-full h-full object-contain"
-                    sizes="160px"
-                    priority={true}
-                  />
-                </div>
-                <span className="text-gray-900 font-bold mt-3 text-base">Zschorlau</span>
-                <span className="text-yellow-600 text-sm font-medium">Hauptstandort</span>
-              </div>
-              
-              <div className="flex flex-col items-center">
-                <div className="min-w-[180px] min-h-[180px] max-w-[200px] max-h-[200px] bg-[#FF0000] rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden hover:bg-[#CC0000] p-4">
-                  <ResponsiveImage 
-                    src="/images/logo02.png" 
-                    alt="Praxis Aue Logo" 
-                    className="w-full h-full object-contain"
-                    sizes="160px"
-                    priority={true}
-                  />
-                </div>
-                <span className="text-gray-900 font-bold mt-3 text-base">Aue</span>
-                <span className="text-red-600 text-sm font-medium">Zweigstelle</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="hidden lg:flex justify-center">
-            {/* Zwei größere Praxis-Rechtecke zentriert */}
-            <div className="flex gap-12 items-center">
+            </motion.div>
+            
+            {/* Mobile & Tablet Logos unter dem Text - DEUTLICH KLEINER */}
+            <div className="flex xl:hidden justify-center items-center w-full mt-2 md:mt-4">
+              <div className="flex gap-3 md:gap-4 items-center">
                 <div className="flex flex-col items-center">
-                  <div className="min-w-[320px] min-h-[320px] max-w-[360px] max-h-[360px] bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden hover:from-amber-500 hover:to-yellow-500 p-6">
+                  <div className="w-[110px] h-[110px] md:w-[120px] md:h-[120px] bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden hover:from-amber-500 hover:to-yellow-500 p-2 md:p-2.5">
                     <ResponsiveImage 
                       src="/images/logo01.png" 
                       alt="Praxis Zschorlau Logo" 
                       className="w-full h-full object-contain"
-                      sizes="(max-width: 768px) 0px, 320px"
+                      sizes="(max-width: 1280px) 120px, 0px"
                       priority={true}
                     />
-              </div>
-                  <span className="text-gray-900 font-bold mt-4 text-xl">Zschorlau</span>
-                  <span className="text-yellow-600 text-lg font-medium">Hauptstandort</span>
-            </div>
+                  </div>
+                  <span className="text-gray-900 font-bold mt-2 text-xs md:text-sm">Zschorlau</span>
+                  <span className="text-yellow-600 text-xs font-medium">Hauptstandort</span>
+                </div>
                 
                 <div className="flex flex-col items-center">
-                  <div className="min-w-[320px] min-h-[320px] max-w-[360px] max-h-[360px] bg-[#FF0000] rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden hover:bg-[#CC0000] p-6">
+                  <div className="w-[110px] h-[110px] md:w-[120px] md:h-[120px] bg-[#FF0000] rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden hover:bg-[#CC0000] p-2 md:p-2.5">
                     <ResponsiveImage 
                       src="/images/logo02.png" 
                       alt="Praxis Aue Logo" 
                       className="w-full h-full object-contain"
-                      sizes="(max-width: 768px) 0px, 320px"
+                      sizes="(max-width: 1280px) 120px, 0px"
                       priority={true}
                     />
                   </div>
-                  <span className="text-gray-900 font-bold mt-4 text-xl">Aue</span>
-                  <span className="text-red-600 text-lg font-medium">Zweigstelle</span>
+                  <span className="text-gray-900 font-bold mt-2 text-xs md:text-sm">Aue</span>
+                  <span className="text-red-600 text-xs font-medium">Zweigstelle</span>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop: 2-Spalten Layout (ab 1280px - nur große Monitore) */}
+          <div className="hidden xl:grid xl:grid-cols-2 gap-10 xl:gap-12 items-center">
+            <motion.div 
+              className="text-center xl:text-left"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <div className="flex items-center gap-4 xl:gap-6 justify-center xl:justify-start">
+                <motion.img 
+                  src="/images/stab.jpg" 
+                  alt="Äskulapstab - Symbol der Medizin" 
+                  className="h-[5rem] w-auto object-contain flex-shrink-0 self-center"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                />
+                <div className="space-y-6">
+                  <motion.h1 
+                    className="text-5xl xl:text-6xl font-bold leading-tight text-gray-900"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+                  >
+                    <span className="block">Hausarztpraxis</span>
+                    <span className="block text-[#FF0000] hover:text-[#CC0000] transition-colors duration-300 cursor-pointer">Dr. Schirmer</span>
+                  </motion.h1>
+                  <motion.p 
+                    className="text-xl xl:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto xl:mx-0"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+                  >
+                    Ihre vertrauensvolle Hausarztpraxis in Zschorlau und Aue. 
+                    Mit moderner Ausstattung und persönlicher Betreuung für die ganze Familie.
+                  </motion.p>
+                  <motion.div 
+                    className="flex flex-col sm:flex-row gap-4 justify-center xl:justify-start"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+                  >
+                    <button 
+                      onClick={() => document.getElementById('locations')?.scrollIntoView({ behavior: 'smooth' })}
+                      className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white rounded-full px-8 py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:from-amber-500 hover:to-yellow-500 min-h-[48px] text-base"
+                    >
+                      <MapPin className="mr-2 h-5 w-5" />
+                      <span className="whitespace-nowrap">Zu unseren Praxen</span>
+                    </button>
+                    <button 
+                      onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                      className="bg-[#FF0000] text-white rounded-full px-8 py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:bg-[#CC0000] min-h-[48px] text-base"
+                    >
+                      <Phone className="mr-2 h-5 w-5" />
+                      <span className="whitespace-nowrap">Termin vereinbaren</span>
+                    </button>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* Desktop Praxis-Rechtecke (große Screens ab 1280px) */}
+            <div className="hidden xl:flex justify-center items-center">
+              <div className="flex gap-10 xl:gap-12 items-center">
+                <div className="flex flex-col items-center">
+                  <div className="w-[280px] h-[280px] xl:w-[320px] xl:h-[320px] 2xl:w-[360px] 2xl:h-[360px] bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden hover:from-amber-500 hover:to-yellow-500 p-5 xl:p-6">
+                    <ResponsiveImage 
+                      src="/images/logo01.png" 
+                      alt="Praxis Zschorlau Logo" 
+                      className="w-full h-full object-contain"
+                      sizes="(min-width: 1280px) 320px, 0px"
+                      priority={true}
+                    />
+                  </div>
+                  <span className="text-gray-900 font-bold mt-4 text-lg xl:text-xl">Zschorlau</span>
+                  <span className="text-yellow-600 text-base xl:text-lg font-medium">Hauptstandort</span>
+                </div>
+                
+                <div className="flex flex-col items-center">
+                  <div className="w-[280px] h-[280px] xl:w-[320px] xl:h-[320px] 2xl:w-[360px] 2xl:h-[360px] bg-[#FF0000] rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden hover:bg-[#CC0000] p-5 xl:p-6">
+                    <ResponsiveImage 
+                      src="/images/logo02.png" 
+                      alt="Praxis Aue Logo" 
+                      className="w-full h-full object-contain"
+                      sizes="(min-width: 1280px) 320px, 0px"
+                      priority={true}
+                    />
+                  </div>
+                  <span className="text-gray-900 font-bold mt-4 text-lg xl:text-xl">Aue</span>
+                  <span className="text-red-600 text-base xl:text-lg font-medium">Zweigstelle</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -263,10 +335,20 @@ const HomePage: React.FC = () => {
                   <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0 text-yellow-600" />
                   <p className="text-gray-700">Schneeberger Straße 3<br />08321 Zschorlau</p>
                 </div>
-                <div className="flex items-start">
+                <a href="tel:037715653950" className="flex items-start hover:opacity-80 transition-opacity">
                   <Phone className="w-5 h-5 text-yellow-600 mt-1 mr-3 flex-shrink-0" />
                   <p className="text-gray-700 font-medium">03771 / 56 53 950</p>
-                </div>
+                </a>
+                <a 
+                  href="tel:037715653958"
+                  className="flex items-start bg-yellow-50 p-3 rounded-lg border-l-4 border-yellow-500 hover:bg-yellow-100 transition-colors cursor-pointer"
+                >
+                  <Phone className="w-5 h-5 text-yellow-600 mt-1 mr-3 flex-shrink-0" />
+                  <div>
+                    <p className="font-bold text-sm text-yellow-800 mb-1">Rezepttelefon</p>
+                    <p className="text-gray-900 font-semibold">03771 / 56 53 958</p>
+                  </div>
+                </a>
               </div>
 
               <div className="mb-6">
@@ -341,10 +423,20 @@ const HomePage: React.FC = () => {
                   <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0 text-red-600" />
                   <p className="text-gray-700">Schwarzenberger Straße 7<br />08280 Aue</p>
                 </div>
-                <div className="flex items-start">
+                <a href="tel:0377120208" className="flex items-start hover:opacity-80 transition-opacity">
                   <Phone className="w-5 h-5 text-red-600 mt-1 mr-3 flex-shrink-0" />
                   <p className="text-gray-700 font-medium">03771 / 20 208</p>
-                </div>
+                </a>
+                <a 
+                  href="tel:03771450032"
+                  className="flex items-start bg-red-50 p-3 rounded-lg border-l-4 border-red-500 hover:bg-red-100 transition-colors cursor-pointer"
+                >
+                  <Phone className="w-5 h-5 text-red-600 mt-1 mr-3 flex-shrink-0" />
+                  <div>
+                    <p className="font-bold text-sm text-red-800 mb-1">Rezepttelefon</p>
+                    <p className="text-gray-900 font-semibold">03771 / 45 00 32</p>
+                  </div>
+                </a>
               </div>
 
               <div className="mb-6">
@@ -355,9 +447,9 @@ const HomePage: React.FC = () => {
                 <ul className="text-gray-600 space-y-1 text-xs md:text-sm">
                   <li><strong>MONTAG:</strong> 07:30 - 12:00 Uhr & 14:00 - 17:00 Uhr</li>
                   <li><strong>DIENSTAG:</strong> 07:30 - 12:00 Uhr & 14:00 - 17:00 Uhr</li>
-                  <li><strong>MITTWOCH:</strong> Geschlossen</li>
-                  <li><strong>DONNERSTAG:</strong> Geschlossen</li>
-                  <li><strong>FREITAG:</strong> Geschlossen</li>
+                  <li><strong>MITTWOCH:</strong> 07:30 - 12:00 Uhr</li>
+                  <li><strong>DONNERSTAG:</strong> 07:30 - 12:00 Uhr & 14:00 - 18:00 Uhr</li>
+                  <li><strong>FREITAG:</strong> 07:30 - 12:00 Uhr</li>
                 </ul>
               </div>
 
@@ -719,10 +811,14 @@ const HomePage: React.FC = () => {
                 <span className="hidden sm:inline">Füllen Sie diesen Bogen vor Ihrem ersten Besuch aus, um Wartezeiten zu verkürzen.</span>
                 <span className="sm:hidden">Wartezeiten verkürzen</span>
               </p>
-              <button className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white rounded-full px-2 py-1 md:px-6 md:py-3 font-bold hover:from-amber-500 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-xs md:text-base w-full">
+              <a 
+                href="/downloads/Patientenbogen.pdf" 
+                download
+                className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white rounded-full px-2 py-1 md:px-6 md:py-3 font-bold hover:from-amber-500 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-xs md:text-base w-full inline-block text-center"
+              >
                 <span className="hidden sm:inline">PDF herunterladen</span>
                 <span className="sm:hidden">PDF</span>
-              </button>
+              </a>
             </motion.div>
 
             <motion.div 
@@ -743,10 +839,14 @@ const HomePage: React.FC = () => {
                 <span className="hidden sm:inline">Einverständniserklärung für Behandlungen und Datenverarbeitung nach DSGVO.</span>
                 <span className="sm:hidden">DSGVO-konform</span>
               </p>
-              <button className="bg-[#FF0000] text-white rounded-full px-2 py-1 md:px-6 md:py-3 font-bold hover:bg-[#CC0000] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-xs md:text-base w-full">
+              <a 
+                href="/downloads/Einverstaendiserklaerung.pdf" 
+                download
+                className="bg-[#FF0000] text-white rounded-full px-2 py-1 md:px-6 md:py-3 font-bold hover:bg-[#CC0000] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-xs md:text-base w-full inline-block text-center"
+              >
                 <span className="hidden sm:inline">PDF herunterladen</span>
                 <span className="sm:hidden">PDF</span>
-              </button>
+              </a>
             </motion.div>
           </div>
         </div>
@@ -794,13 +894,23 @@ const HomePage: React.FC = () => {
                 </div>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center">
+                <a href="tel:037715653950" className="flex items-center hover:opacity-80 transition-opacity">
                   <Phone className="w-5 h-5 mr-3 text-yellow-600" />
                   <div>
                     <p className="font-semibold text-sm">Telefon</p>
                     <p className="text-sm">03771 / 56 53 950</p>
                   </div>
-                </div>
+                </a>
+                <a 
+                  href="tel:037715653958"
+                  className="flex items-center bg-yellow-50 p-2 rounded-lg border-l-4 border-yellow-500 hover:bg-yellow-100 transition-colors cursor-pointer"
+                >
+                  <Phone className="w-5 h-5 mr-3 text-yellow-600 flex-shrink-0" />
+                  <div>
+                    <p className="font-bold text-sm text-yellow-800">Rezepttelefon</p>
+                    <p className="text-sm font-semibold text-yellow-900">03771 / 56 53 958</p>
+                  </div>
+                </a>
                 <div className="flex items-center">
                   <Phone className="w-5 h-5 mr-3 text-yellow-600" />
                   <div>
@@ -860,13 +970,23 @@ const HomePage: React.FC = () => {
                 </div>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center">
+                <a href="tel:0377120208" className="flex items-center hover:opacity-80 transition-opacity">
                   <Phone className="w-5 h-5 mr-3 text-red-600" />
                   <div>
                     <p className="font-semibold text-sm">Telefon</p>
                     <p className="text-sm">03771 / 20 208</p>
                   </div>
-                </div>
+                </a>
+                <a 
+                  href="tel:03771450032"
+                  className="flex items-center bg-red-50 p-2 rounded-lg border-l-4 border-red-500 hover:bg-red-100 transition-colors cursor-pointer"
+                >
+                  <Phone className="w-5 h-5 mr-3 text-red-600 flex-shrink-0" />
+                  <div>
+                    <p className="font-bold text-sm text-red-800">Rezepttelefon</p>
+                    <p className="text-sm font-semibold text-red-900">03771 / 45 00 32</p>
+                  </div>
+                </a>
                 <div className="flex items-center">
                   <Phone className="w-5 h-5 mr-3 text-red-600" />
                   <div>

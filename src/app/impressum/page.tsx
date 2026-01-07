@@ -36,14 +36,14 @@ const ImpressumPage: React.FC = () => {
                   Angaben gemäß § 5 TMG
                 </h2>
                 <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
-                  <div>
+                      <div>
                     <p className="font-bold text-gray-900 text-lg mb-2">Lars Schirmer</p>
                     <p className="text-gray-700 mb-1">Ihre Hausarztpraxis in Zschorlau und Aue</p>
                     <p className="text-gray-700 mb-1">Schneeberger Str. 3</p>
                     <p className="text-gray-700 mb-1">Landarztpraxis Zschorlau</p>
                     <p className="text-gray-700">08321 Zschorlau</p>
-                  </div>
-                </div>
+                      </div>
+                    </div>
               </section>
 
               {/* Kontakt */}
@@ -55,8 +55,8 @@ const ImpressumPage: React.FC = () => {
                 <div className="bg-yellow-50 rounded-2xl p-6 space-y-3">
                   <div className="flex items-start">
                     <Phone className="w-5 h-5 text-yellow-600 mr-3 mt-1 flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold text-gray-900">Telefon:</p>
+                      <div>
+                        <p className="font-semibold text-gray-900">Telefon:</p>
                       <a href="tel:+4937715653950" className="text-gray-700 hover:text-yellow-600 transition-colors">
                         +49 (0) 3771 5653950
                       </a>
@@ -64,15 +64,15 @@ const ImpressumPage: React.FC = () => {
                   </div>
                   <div className="flex items-start">
                     <Phone className="w-5 h-5 text-yellow-600 mr-3 mt-1 flex-shrink-0" />
-                    <div>
+                      <div>
                       <p className="font-semibold text-gray-900">Telefax:</p>
                       <p className="text-gray-700">+49 (0) 3771 5653959</p>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <Mail className="w-5 h-5 text-yellow-600 mr-3 mt-1 flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold text-gray-900">E-Mail:</p>
+                      <div>
+                        <p className="font-semibold text-gray-900">E-Mail:</p>
                       <a href="mailto:hausarztpraxis-dr-schirmer@web.de" className="text-gray-700 hover:text-yellow-600 transition-colors break-all">
                         hausarztpraxis-dr-schirmer@web.de
                       </a>
@@ -99,7 +99,7 @@ const ImpressumPage: React.FC = () => {
                   >
                     http://kvsachsen.de
                   </a>
-                </div>
+                      </div>
               </section>
 
               {/* Berufsbezeichnung und berufsrechtliche Regelungen */}
@@ -109,11 +109,11 @@ const ImpressumPage: React.FC = () => {
                   Berufsbezeichnung und berufsrechtliche Regelungen
                 </h2>
                 <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
-                  <div>
+                      <div>
                     <p className="font-semibold text-gray-900 mb-2">Berufsbezeichnung:</p>
                     <p className="text-gray-700">Facharzt für Allgemeinmedizin</p>
-                  </div>
-                  <div>
+                    </div>
+                      <div>
                     <p className="font-semibold text-gray-900 mb-2">Zuständige Kammer:</p>
                     <p className="text-gray-700 mb-2">SLAEK Dresden</p>
                     <a 
@@ -124,11 +124,11 @@ const ImpressumPage: React.FC = () => {
                     >
                       http://slaek.de
                     </a>
-                  </div>
-                  <div>
+                    </div>
+                      <div>
                     <p className="font-semibold text-gray-900 mb-2">Verliehen in:</p>
                     <p className="text-gray-700">Deutschland</p>
-                  </div>
+                      </div>
                   <div className="pt-4 border-t border-gray-200">
                     <p className="text-sm text-gray-600 italic">
                       Es gelten folgende berufsrechtliche Regelungen: SLAEK Dresden einsehbar unter:{' '}
@@ -205,7 +205,7 @@ const ImpressumPage: React.FC = () => {
               <section>
                 <div className="text-center text-sm text-gray-500 pt-4 border-t border-gray-200">
                   <p>Quelle: e-recht24.de</p>
-                </div>
+              </div>
               </section>
             </div>
           </div>

@@ -21,6 +21,8 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
   showPhoneModal,
   setShowPhoneModal
 }) => {
+  const [isLocationPickerOpen, setIsLocationPickerOpen] = React.useState(false);
+
   const textVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -118,27 +120,46 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
             </motion.div>
 
             <motion.div 
-              className="flex flex-wrap justify-center lg:justify-start gap-4 grid-spacing-sm"
+              className="flex flex-wrap justify-center lg:justify-start gap-4 grid-spacing-sm relative"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <div className="flex flex-col gap-2 w-full sm:w-auto">
-                <AppointmentButton 
-                  location="zschorlau" 
-                  variant="overlay" 
-                  label="Termin Zschorlau" 
-                  className="w-full justify-center shadow-lg hover:shadow-xl"
-                />
-                <AppointmentButton 
-                  location="aue" 
-                  variant="overlay" 
-                  label="Termin Aue" 
-                  className="w-full justify-center shadow-lg hover:shadow-xl"
-                />
+              <div className="relative">
+                <button
+                  onClick={() => setIsLocationPickerOpen(!isLocationPickerOpen)}
+                  className="flex items-center justify-center bg-white text-gray-700 px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                >
+                  <Phone className="w-5 h-5 mr-2 text-green-600" />
+                  Termin vereinbaren
+                </button>
+
+                {isLocationPickerOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute top-full left-0 mt-2 p-2 bg-white rounded-2xl shadow-xl z-50 w-64 border border-gray-100"
+                  >
+                    <div className="flex flex-col gap-2">
+                      <AppointmentButton 
+                        location="zschorlau" 
+                        variant="overlay" 
+                        label="Praxis Zschorlau" 
+                        className="w-full justify-start"
+                      />
+                      <AppointmentButton 
+                        location="aue" 
+                        variant="overlay" 
+                        label="Praxis Aue" 
+                        className="w-full justify-start"
+                      />
+                    </div>
+                  </motion.div>
+                )}
               </div>
               
-              <button className="flex items-center justify-center bg-white text-gray-700 px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 w-full sm:w-auto h-fit self-start">
+              <button className="flex items-center justify-center bg-white text-gray-700 px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                 <Navigation className="w-5 h-5 mr-2 text-blue-600" />
                 Route planen
               </button>

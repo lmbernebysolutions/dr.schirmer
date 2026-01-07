@@ -28,6 +28,7 @@ import {
   Lock
 } from 'lucide-react';
 import ResponsiveImage from '@/components/ui/ResponsiveImage';
+import AppointmentButton from '@/components/ui/AppointmentButton';
 import ResponsiveHeader from '@/components/layout/ResponsiveHeader';
 import SectionDivider from '@/components/ui/SectionDivider';
 import { SERVICES, IGeL_SERVICES } from '@/config/services';

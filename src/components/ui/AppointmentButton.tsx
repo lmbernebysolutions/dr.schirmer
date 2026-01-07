@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Calendar } from 'lucide-react';
 
@@ -42,11 +44,32 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ({
   `;
 
   if (variant === 'overlay') {
+    const handleClick = (e: React.MouseEvent) => {
+      // Versuch, existierende Overlays zu finden und zu schließen (Toggle-Verhalten)
+      // Medatixx erstellt oft Iframes oder Container am Ende des Body
+      const existingOverlays = document.querySelectorAll('iframe[src*="medatixx"], div[class*="terminbuchung"]');
+      
+      let closed = false;
+      existingOverlays.forEach((overlay) => {
+        // Prüfen ob es ein sichtbares Overlay ist (nicht der Button selbst)
+        if (overlay !== e.currentTarget && overlay.tagName !== 'BUTTON' && overlay.clientHeight > 0) {
+          overlay.remove(); // Oder style.display = 'none'
+          closed = true;
+        }
+      });
+
+      if (closed) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    };
+
     return (
       <button
         type="button"
         className={`terminbuchung-trigger ${baseClasses}`}
         data-configid={currentConfig.id}
+        onClick={handleClick}
       >
         {showIcon && <Calendar className="w-4 h-4 mr-2" />}
         {label}

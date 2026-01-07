@@ -45,30 +45,38 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ({
 
   if (variant === 'overlay') {
     const handleClick = (e: React.MouseEvent) => {
-      // Versuch, existierende Overlays zu finden und zu schließen (Toggle-Verhalten)
-      // Medatixx erstellt oft Iframes oder Container am Ende des Body
-      const existingOverlays = document.querySelectorAll('iframe[src*="medatixx"], div[class*="terminbuchung"]');
+      e.preventDefault(); // Verhindere Navigation/Default
       
+      // Toggle-Logik: Prüfen ob Overlay offen ist
+      const existingOverlays = document.querySelectorAll('iframe[src*="medatixx"], div[class*="terminbuchung"]');
       let closed = false;
+      
       existingOverlays.forEach((overlay) => {
-        // Prüfen ob es ein sichtbares Overlay ist (nicht der Button selbst)
         if (overlay !== e.currentTarget && overlay.tagName !== 'BUTTON' && overlay.clientHeight > 0) {
-          overlay.remove(); // Oder style.display = 'none'
+          overlay.remove();
           closed = true;
         }
       });
 
-      if (closed) {
-        e.stopPropagation();
-        e.preventDefault();
+      if (closed) return; // Wenn geschlossen, nicht neu öffnen
+
+      // Proxy-Klick auf den versteckten Trigger
+      const triggerId = location === 'zschorlau' ? 'trigger-zschorlau' : 'trigger-aue';
+      const hiddenTrigger = document.getElementById(triggerId);
+      
+      if (hiddenTrigger) {
+        hiddenTrigger.click();
+      } else {
+        console.error('Termin-Trigger nicht gefunden:', triggerId);
+        // Fallback: Alert oder Standalone öffnen?
+        window.open(currentConfig.standaloneUrl, '_blank');
       }
     };
 
     return (
       <button
         type="button"
-        className={`terminbuchung-trigger ${baseClasses}`}
-        data-configid={currentConfig.id}
+        className={`${baseClasses}`} // Keine Trigger-Klasse mehr hier!
         onClick={handleClick}
       >
         {showIcon && <Calendar className="w-4 h-4 mr-2" />}

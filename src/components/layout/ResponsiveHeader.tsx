@@ -405,14 +405,23 @@ const ResponsiveHeader = () => {
                   </Link>
                 );
               })}
-              <Link
-                href="#contact"
-                className="block text-center py-4 bg-[#FF0000] text-white font-bold rounded-b-3xl hover:bg-[#CC0000] transition-colors min-h-[48px] flex items-center justify-center"
-                style={{ fontSize: 'clamp(0.75rem, 1.5vw, 0.875rem)' }}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Kontakt
-              </Link>
+              <div className="p-4 border-t border-gray-100 bg-gray-50">
+                <p className="text-center text-sm font-bold text-gray-500 mb-3">Online Terminbuchung</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <AppointmentButton 
+                    location="zschorlau" 
+                    variant="overlay" 
+                    label="Zschorlau" 
+                    className="w-full justify-center text-sm py-3 shadow-md"
+                  />
+                  <AppointmentButton 
+                    location="aue" 
+                    variant="overlay" 
+                    label="Aue" 
+                    className="w-full justify-center text-sm py-3 shadow-md"
+                  />
+                </div>
+              </div>
             </motion.div>
           )}
 

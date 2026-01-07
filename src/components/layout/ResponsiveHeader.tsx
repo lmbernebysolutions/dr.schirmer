@@ -12,6 +12,7 @@ const ResponsiveHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [isAlertExpanded, setIsAlertExpanded] = useState(false);
+  const [isAppointmentPickerOpen, setIsAppointmentPickerOpen] = useState(false);
   const [currentLogoIndex, setCurrentLogoIndex] = useState(0);
   const [alertSettings, setAlertSettings] = useState<AlertSettings>({
     isVisible: false,
@@ -285,50 +286,74 @@ const ResponsiveHeader = () => {
                 </button>
               )}
 
-              {/* Appointment Buttons - Desktop */}
-              <div className="hidden xl:flex items-center space-x-2">
-                <AppointmentButton 
-                  location="zschorlau" 
-                  variant="overlay" 
-                  label="Termin Zschorlau" 
-                  className="px-3 py-2 text-xs font-semibold shadow-md hover:shadow-lg min-h-[48px]"
-                  showIcon={true}
-                />
-                <AppointmentButton 
-                  location="aue" 
-                  variant="overlay" 
-                  label="Termin Aue" 
-                  className="px-3 py-2 text-xs font-semibold shadow-md hover:shadow-lg min-h-[48px]"
-                  showIcon={true}
-                />
+              {/* Appointment Button with Dropdown - Desktop */}
+              <div className="hidden xl:flex items-center relative">
+                <button
+                  onClick={() => setIsAppointmentPickerOpen(!isAppointmentPickerOpen)}
+                  className="flex items-center justify-center bg-gradient-to-r from-yellow-500 to-red-500 text-white rounded-full px-4 py-2 font-bold hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-h-[48px]"
+                  style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1rem)' }}
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Online Termin
+                  {isAppointmentPickerOpen ? <ChevronUp className="w-4 h-4 ml-1" /> : <ChevronDown className="w-4 h-4 ml-1" />}
+                </button>
+
+                {/* Dropdown Menu */}
+                {isAppointmentPickerOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute top-full right-0 mt-2 p-3 bg-white rounded-2xl shadow-xl z-50 w-64 border border-gray-100 flex flex-col gap-2"
+                  >
+                    <AppointmentButton 
+                      location="zschorlau" 
+                      variant="overlay" 
+                      label="Praxis Zschorlau" 
+                      className="w-full justify-start text-sm shadow-sm"
+                    />
+                    <AppointmentButton 
+                      location="aue" 
+                      variant="overlay" 
+                      label="Praxis Aue" 
+                      className="w-full justify-start text-sm shadow-sm"
+                    />
+                  </motion.div>
+                )}
               </div>
 
-              {/* Contact Button - Desktop */}
-              <button
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="hidden xl:flex items-center justify-center bg-[#FF0000] text-white rounded-full px-4 py-2 font-bold hover:bg-[#CC0000] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px]"
-                style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1rem)' }}
-              >
-                Kontakt
-              </button>
-
-              {/* Contact Button - Laptop */}
-              <button
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="hidden lg:flex xl:hidden items-center justify-center bg-[#FF0000] text-white rounded-full px-3 py-1.5 font-bold hover:bg-[#CC0000] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px]"
-                style={{ fontSize: 'clamp(0.625rem, 1.1vw, 0.875rem)' }}
-              >
-                Kontakt
-              </button>
-
-              {/* Contact Button - Tablet */}
-              <button
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="hidden md:flex lg:hidden items-center justify-center bg-[#FF0000] text-white rounded-full px-3 py-1.5 font-bold hover:bg-[#CC0000] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px]"
-                style={{ fontSize: 'clamp(0.625rem, 1.2vw, 0.875rem)' }}
-              >
-                Kontakt
-              </button>
+              {/* Tablet/Laptop Appointment Button */}
+              <div className="hidden md:flex xl:hidden items-center relative">
+                 <button
+                  onClick={() => setIsAppointmentPickerOpen(!isAppointmentPickerOpen)}
+                  className="flex items-center justify-center bg-gradient-to-r from-yellow-500 to-red-500 text-white rounded-full px-3 py-1.5 font-bold hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-h-[48px]"
+                  style={{ fontSize: 'clamp(0.625rem, 1.2vw, 0.875rem)' }}
+                >
+                  <Calendar className="w-3 h-3 mr-1" />
+                  Termin
+                </button>
+                 {isAppointmentPickerOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute top-full right-0 mt-2 p-2 bg-white rounded-2xl shadow-xl z-50 w-56 border border-gray-100 flex flex-col gap-2"
+                  >
+                    <AppointmentButton 
+                      location="zschorlau" 
+                      variant="overlay" 
+                      label="Zschorlau" 
+                      className="w-full justify-start text-xs shadow-sm"
+                    />
+                    <AppointmentButton 
+                      location="aue" 
+                      variant="overlay" 
+                      label="Aue" 
+                      className="w-full justify-start text-xs shadow-sm"
+                    />
+                  </motion.div>
+                )}
+              </div>
 
               {/* Mobile Alert Button */}
               {alertSettings.isVisible && (

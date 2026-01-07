@@ -55,6 +55,7 @@ const HomePage: React.FC = () => {
   const [showPhoneModal, setShowPhoneModal] = React.useState(false);
   const [openAccordions, setOpenAccordions] = React.useState<Set<string>>(new Set());
   const [isMounted, setIsMounted] = React.useState(false);
+  const [isAppointmentPickerOpen, setIsAppointmentPickerOpen] = React.useState(false);
   const { detailedConsent, openPreferencesModal } = useCookieConsent();
 
   // Hydration Fix: Warte bis Client-Side Rendering abgeschlossen ist
@@ -145,13 +146,38 @@ const HomePage: React.FC = () => {
                     <MapPin className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                     <span className="whitespace-nowrap">Zu unseren Praxen</span>
                   </button>
-                  <button 
-                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="bg-[#FF0000] text-white rounded-full px-6 md:px-8 py-3 md:py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:bg-[#CC0000] min-h-[48px] text-sm md:text-base"
-                  >
-                    <Phone className="mr-2 h-4 w-4 md:h-5 md:w-5" />
-                    <span className="whitespace-nowrap">Termin vereinbaren</span>
-                  </button>
+                  
+                  <div className="relative">
+                    <button 
+                      onClick={() => setIsAppointmentPickerOpen(!isAppointmentPickerOpen)}
+                      className="bg-[#FF0000] text-white rounded-full px-6 md:px-8 py-3 md:py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:bg-[#CC0000] min-h-[48px] text-sm md:text-base w-full"
+                    >
+                      <Calendar className="mr-2 h-4 w-4 md:h-5 md:w-5" />
+                      <span className="whitespace-nowrap">Termin vereinbaren</span>
+                    </button>
+                    
+                    {isAppointmentPickerOpen && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute top-full left-0 right-0 mt-2 p-3 bg-white rounded-2xl shadow-xl z-50 border border-gray-100 flex flex-col gap-2"
+                      >
+                        <AppointmentButton 
+                          location="zschorlau" 
+                          variant="overlay" 
+                          label="Praxis Zschorlau" 
+                          className="w-full justify-start text-sm shadow-sm"
+                        />
+                        <AppointmentButton 
+                          location="aue" 
+                          variant="overlay" 
+                          label="Praxis Aue" 
+                          className="w-full justify-start text-sm shadow-sm"
+                        />
+                      </motion.div>
+                    )}
+                  </div>
                 </motion.div>
               </div>
             </motion.div>
@@ -239,13 +265,38 @@ const HomePage: React.FC = () => {
                       <MapPin className="mr-2 h-5 w-5" />
                       <span className="whitespace-nowrap">Zu unseren Praxen</span>
                     </button>
-                    <button 
-                      onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="bg-[#FF0000] text-white rounded-full px-8 py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:bg-[#CC0000] min-h-[48px] text-base"
-                    >
-                      <Phone className="mr-2 h-5 w-5" />
-                      <span className="whitespace-nowrap">Termin vereinbaren</span>
-                    </button>
+                    
+                    <div className="relative">
+                      <button 
+                        onClick={() => setIsAppointmentPickerOpen(!isAppointmentPickerOpen)}
+                        className="bg-[#FF0000] text-white rounded-full px-8 py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:bg-[#CC0000] min-h-[48px] text-base"
+                      >
+                        <Calendar className="mr-2 h-5 w-5" />
+                        <span className="whitespace-nowrap">Termin vereinbaren</span>
+                      </button>
+                      
+                      {isAppointmentPickerOpen && (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute top-full left-0 mt-2 p-3 bg-white rounded-2xl shadow-xl z-50 w-64 border border-gray-100 flex flex-col gap-2"
+                        >
+                          <AppointmentButton 
+                            location="zschorlau" 
+                            variant="overlay" 
+                            label="Praxis Zschorlau" 
+                            className="w-full justify-start text-sm shadow-sm"
+                          />
+                          <AppointmentButton 
+                            location="aue" 
+                            variant="overlay" 
+                            label="Praxis Aue" 
+                            className="w-full justify-start text-sm shadow-sm"
+                          />
+                        </motion.div>
+                      )}
+                    </div>
                   </motion.div>
                 </div>
               </div>

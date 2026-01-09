@@ -274,7 +274,7 @@ const HomePage: React.FC = () => {
                         className="bg-[#FF0000] text-white rounded-full px-8 py-4 font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center hover:bg-[#CC0000] min-h-[48px] text-base"
                       >
                         <Calendar className="mr-2 h-5 w-5" />
-                        <span className="whitespace-nowrap">Termin vereinbaren</span>
+                        <span className="whitespace-nowrap">Online Termin buchen</span>
                       </button>
                       
                       {isAppointmentPickerOpen && (

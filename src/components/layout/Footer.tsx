@@ -104,7 +104,7 @@ const Footer = () => {
                     <AppointmentButton 
                       location="zschorlau" 
                       variant="standalone" 
-                      label="Termin buchen" 
+                      label="Online Termin buchen" 
                       className="w-full text-xs py-1"
                     />
                   </div>
@@ -134,7 +134,7 @@ const Footer = () => {
                     <AppointmentButton 
                       location="aue" 
                       variant="standalone" 
-                      label="Termin buchen" 
+                      label="Online Termin buchen" 
                       className="w-full text-xs py-1"
                     />
                   </div>
